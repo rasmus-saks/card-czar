@@ -8,6 +8,7 @@ var session = require('express-session');
 var compression = require('compression');
 var stylus = require('stylus');
 var nib = require('nib');
+var models = require('./models');
 
 var app = express();
 
