@@ -4,7 +4,12 @@ extends index
 
 block body
   .game(ng-app="CardCzar" ng-cloak ng-controller="CCMainCtrl as ccmain")
-    h1 {{ccmain.hello}} {{ccmain.name}}
+    .lobby
+      h1 {{ccmain.lobbycode}}
+      h1 Lobby
+      .users
+        .user(ng-repeat="user in ccmain.users") {{user.name}}
+      .btn.btn-primary.btn-lg Start Game
 
 block scripts
   script(src="/bower_components/angular/angular.min.js")
