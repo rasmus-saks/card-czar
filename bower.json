@@ -1,0 +1,16 @@
+{
+  "name": "card-czar",
+  "authors": [
+    "Waystone OÜ <hello@waystone.io>"
+  ],
+  "description": "",
+  "main": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

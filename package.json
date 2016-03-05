@@ -1,0 +1,30 @@
+{
+  "name": "card-czar",
+  "version": "1.0.0",
+  "description": "A crappy Cards Against Humanity clone",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rasmussaks/card-czar.git"
+  },
+  "devDependencies": {},
+  "author": "Waystone OÜ <hello@waystone.io>",
+  "scripts": {
+    "start": "node bin/www.js"
+  },
+  "license": "SEE LICENSE IN LICENSE.md",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "chalk": "^1.1.1",
+    "compression": "^1.6.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.1",
+    "debug": "^2.2.0",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "jade": "^1.11.0",
+    "morgan": "^1.7.0",
+    "nib": "^1.1.0",
+    "stylus": "^0.53.0"
+  }
+}
