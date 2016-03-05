@@ -7,6 +7,7 @@
     socket.on('init', function (data) {
       ccmain.name = data.name;
       ccmain.users = data.users;
+      ccmain.lobbycode = data.lobbycode;
     });
     ccmain.selectCard = function (cardid) {
       socket.emit('send:cardSelection', {
