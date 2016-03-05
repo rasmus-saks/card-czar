@@ -12,7 +12,7 @@ var models = require('./models');
 var sequelize = models.sequelize;
 
 sequelize.authenticate().then(function() {
-  console.log("Connected to MySQL")
+  console.log("Connected to MySQL");
 });
 
 var app = express();
