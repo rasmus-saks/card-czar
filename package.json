@@ -10,7 +10,7 @@
   "devDependencies": {},
   "author": "Waystone OÜ <hello@waystone.io>",
   "scripts": {
-    "start": "node bin/www.js"
+    "start": "node src/bin/www.js"
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
