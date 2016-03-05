@@ -1,6 +1,6 @@
 var app = require("../app");
 var http = require('http');
-var port = process.env.PORT || '80';
+var port = process.env.PORT || '8081';
 var util = require('util');
 var chalk = require('chalk');
 app.set('port', port);
