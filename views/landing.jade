@@ -6,6 +6,19 @@ block body
       .container
          .col-lg-12
             h1 Card Czar
-            p The mobile-friendly Cards Against Humanity clone no one asked for
-
-
+            p The mobile-friendly Cards Against Humanity clone you never asked for
+            .col-lg-6
+               .input-group.input-group-lg
+                  input.form-control#lobbycode(type="text" placeholder="Lobby Code")
+                  span.input-group-btn
+                     a.btn.btn-lg.btn-primary#joinlobby(href="/game") JOIN
+            br
+            |or
+            br
+            .btn.btn-lg.btn-default(href="/game/new") Create your own lobby
+block scripts
+   script.
+      $('#lobbycode').on('input propertychange paste',function(){
+         console.log("Happened!");
+         $('#joinlobby').attr("href","/game/"+$('#lobbycode').val());
+      })
