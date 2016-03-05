@@ -1,0 +1,16 @@
+{
+  "development": {
+    "username": "root",
+    "password": "bogeyman",
+    "database": "cardczar",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "cardczar",
+    "password": "cardczar",
+    "database": "cardczar",
+    "host": "aa14efe4zww8bxi.cyqhcvv7n2ar.eu-central-1.rds.amazonaws.com:3306",
+    "dialect": "mysql"
+  }
+}
