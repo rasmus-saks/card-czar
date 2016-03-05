@@ -37,8 +37,8 @@ app.use(session({
   secret: 'x9fgj9aoi8848w0kokc08ws0s'
 }));
 
-var indexRoute = require("./routes/index");
-app.use("/", indexRoute);
+app.use("/", require("./routes/index"));
+app.use("/game", require("./routes/game"));
 
 
 module.exports = app;
