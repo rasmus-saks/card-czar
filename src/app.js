@@ -31,7 +31,7 @@ app.use(stylus.middleware({
     return stylus(str)
       .set('filename', path)
       .set('compress', true)
-      .use(nib())
+      .use(nib());
   }
 }));
 app.use(express.static(path.join(__dirname, '../public')));
