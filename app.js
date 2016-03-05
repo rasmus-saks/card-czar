@@ -9,12 +9,17 @@ var compression = require('compression');
 var stylus = require('stylus');
 var nib = require('nib');
 var models = require('./models');
+var sequelize = models.sequelize;
+
+sequelize.authenticate().then(function() {
+  console.log("Connected to MySQL")
+});
 
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(logger('dev'));
+app.use(logger('common'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
