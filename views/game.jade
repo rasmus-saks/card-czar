@@ -1,0 +1,13 @@
+//
+   Created by AlWilliam on 3/5/2016.
+extends index
+
+block body
+  .game(ng-app="CardCzar" ng-cloak ng-controller="CCMainCtrl as ccmain")
+    h1 {{ccmain.hello}}
+
+block scripts
+  script(src="/bower_components/angular/angular.min.js")
+  script(src="/js/app.js")
+  script(src="/js/filters.js")
+  script(src="/js/services.js")
