@@ -22,7 +22,7 @@ angular.module('CardCzar.services', []).
               callback.apply(socket, args);
             }
           });
-        })
+        });
       }
     };
   });
