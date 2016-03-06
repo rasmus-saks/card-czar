@@ -7,7 +7,7 @@ function Socket(server) {
       name: "Name",
       users: [{name: "User1"}, {name: "User2"}],
       lobbycode: "123ABC"
-    })
+    });
   });
   return io;
 
