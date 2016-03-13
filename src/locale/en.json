@@ -1,0 +1,19 @@
+{
+  "landing": {
+    "valueprop":"The mobile-friendly Cards Against Humanity clone you never asked for",
+    "lobbycode":"Lobby Code",
+    "join":"Join",
+    "or":"or",
+    "createlobby": "Create your own lobby",
+    "authors":"Made by Al William Tammsaar, Rasmus Saks and Janek Timmas"
+  },
+  "game": {
+    "lobby":"Lobby",
+    "startgame":"Start Game"
+  },
+  "login": {
+    "login":"Log in with:",
+    "banklink": "Bank Link",
+    "mobileid": "Mobile-ID"
+  }
+}
