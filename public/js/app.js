@@ -13,7 +13,7 @@
       socket.emit('send:cardSelection', {
         selection: cardid
       });
-    }
+    };
 
   });
 })();

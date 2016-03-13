@@ -8,12 +8,18 @@ var session = require('express-session');
 var compression = require('compression');
 var stylus = require('stylus');
 var nib = require('nib');
+var models = require('./models');
+var sequelize = models.sequelize;
+
+sequelize.authenticate().then(function() {
+  console.log("Connected to MySQL");
+});
 
 var app = express();
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'jade');
-app.use(logger('dev'));
+app.use(logger('common'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -25,11 +31,11 @@ app.use(stylus.middleware({
     return stylus(str)
       .set('filename', path)
       .set('compress', true)
-      .use(nib())
+      .use(nib());
   }
 }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use("/bower_components", express.static(path.join(__dirname, 'bower_components')));
+app.use(express.static(path.join(__dirname, '../public')));
+app.use("/bower_components", express.static(path.join(__dirname, '../bower_components')));
 app.use(flash());
 app.use(session({
   saveUninitialized: false,
