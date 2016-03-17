@@ -6,7 +6,8 @@ module.exports = function(grunt) {
       options: {
         globals: {
           jQuery: true
-        }
+        },
+        node: true
       }
     },
     exec: {
