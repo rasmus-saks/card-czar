@@ -1,10 +1,14 @@
+'use strict';
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('User', {
-    name: DataTypes.STRING
+    status: {type: DataTypes.INTEGER, allowNull: true},
+    points: DataTypes.INTEGER
   }, {
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+        User.hasOne(models.Game);
+        User.belongsToMany(models.Card, {as: "HandCard", through: "HandCards"});
+        User.belongsToMany(models.Card, {as: "PickedCard", through: "PickedCards"});
       }
     }
   });

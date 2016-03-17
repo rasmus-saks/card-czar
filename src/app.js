@@ -13,6 +13,11 @@ var sequelize = models.sequelize;
 
 sequelize.authenticate().then(function() {
   console.log("Connected to MySQL");
+  //Force sync schema
+  sequelize.query('SET FOREIGN_KEY_CHECKS = 0',  {raw: true})
+    .then(function(){
+      sequelize.sync({force: true});
+    });
 });
 
 var app = express();
