@@ -6,23 +6,23 @@ block body
       .container
          .col-lg-12
             h1 Card Czar
-            p The mobile-friendly Cards Against Humanity clone you never asked for
+            p #{lang.landing.valueprop}
             .row
                .col-lg-6
                   .input-group.input-group-lg
-                     input.form-control#lobbycode(type="text" placeholder="Lobby Code")
+                     input.form-control#lobbycode(type="text" placeholder=lang.landing.lobbycode)
                      span.input-group-btn
-                        a.btn.btn-lg.btn-primary#joinlobby(href="/game") JOIN
+                        a.btn.btn-lg.btn-primary#joinlobby(href="/game") #{lang.landing.join}
             .row
                .col-lg-6
                   br
                   br
-                  |or
+                  |#{lang.landing.or}
                   br
                   br
-                  .btn.btn-lg.btn-default(href="/game/new") Create your own lobby
+                  .btn.btn-lg.btn-default(href="/game/new") #{lang.landing.createlobby}
    .footer.container
-      | Made by Al William Tammsaar, Rasmus Saks and Janek Timmas
+      | #{lang.landing.authors}
       br
       | Pointless links | map | some facebook page | some random ID card thing
 block scripts
