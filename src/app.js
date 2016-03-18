@@ -9,15 +9,16 @@ var compression = require('compression');
 var stylus = require('stylus');
 var nib = require('nib');
 var models = require('./models');
+global.env = process.env.NODE_ENV || 'development';
+var config = require('./config/config.json')[env];
 var sequelize = models.sequelize;
+var passport = require('passport');
 
-sequelize.authenticate().then(function() {
+
+sequelize.authenticate().then(function () {
   console.log("Connected to MySQL");
   //Force sync schema
-  sequelize.query('SET FOREIGN_KEY_CHECKS = 0',  {raw: true})
-    .then(function(){
-      sequelize.sync({force: true});
-    });
+  return sequelize.sync({force: false});
 });
 
 var app = express();
@@ -48,7 +49,31 @@ app.use(session({
   secret: 'x9fgj9aoi8848w0kokc08ws0s'
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+//Initialize passport strategies
+require("./app/passport.js")(passport);
+
+app.use(function (req, res, next) {
+  //Get language file
+  if (req.query.lang) {
+    try {
+      req.lang = require("./locale/" + req.query.lang + ".json");
+      next();
+      return;
+    } catch (ignored) {
+
+    }
+  }
+  req.lang = require("./locale/en.json");
+  //Load into jade
+  res.locals.lang = req.lang;
+  next();
+});
+
 app.use("/game", require("./routes/game"));
+app.use("/auth", require("./routes/auth"));
 app.use("/", require("./routes/index"));
 
 

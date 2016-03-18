@@ -3,10 +3,12 @@
 extends layout
 
 block body
-   .login
-      h1 #{lang.login.login}
-      .btn.btn-default.btn-block Facebook
-      .btn.btn-default.btn-block Twitter
-      .btn.btn-default.btn-block Google+
-      .btn.btn-default.btn-block #{lang.login.banklink}
-      .btn.btn-default.btn-block #{lang.login.mobileid}
+  .login
+    h1 #{lang.login.login}
+    .btn.btn-default.btn-block
+      a(href="/auth/facebook") Facebook
+    .btn.btn-default.btn-block 
+      a(href="/auth/google") Google
+    .btn.btn-default.btn-block Twitter
+    .btn.btn-default.btn-block #{lang.login.banklink}
+    .btn.btn-default.btn-block #{lang.login.mobileid}

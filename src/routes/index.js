@@ -1,13 +1,12 @@
 var express = require('express');
-var en = require('../locale/en.json');
 var router = express.Router();
 
 router.get("/login", function (req, res) {
-  res.render('login', {lang:en});
+  res.render('login');
 });
 
 router.get("*", function (req, res) {
-  res.render('landing', {lang:en});
+  res.render('landing');
 });
 
 module.exports = router;
