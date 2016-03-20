@@ -31,11 +31,8 @@ sequelize.authenticate().then(function () {
       var black = fs.readFileSync("./src/config/bcards.txt", "utf8").split("<>");
       for (var i = 0; i < white.length; i++) {
         var w = white[i];
-        deck.createCard({
-          text: w,
-          isBlack: false,
-          chooseNum: 0
-        });
+        //Raw INSERT query because we have to..
+        sequelize.query("INSERT INTO Cards (text, isBlack, chooseNum, createdAt, updatedAt) VALUES('" + w.replace("'", "\\'") + "', false, 0, NOW(), NOW())");
       }
       for (var j = 0; j < black.length; j++) {
         var b = black[j];
