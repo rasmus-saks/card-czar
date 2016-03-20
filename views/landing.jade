@@ -2,32 +2,33 @@
    Created by AlWilliam on 3/5/2016.
 extends layout
 block body
-   .intro
-      .container
-         .col-lg-12
-            h1 Card Czar
-            p #{lang.landing.valueprop}
-            .row
-               .col-lg-6
-                  .input-group.input-group-lg
-                     input.form-control#lobbycode(type="text" placeholder=lang.landing.lobbycode)
-                     span.input-group-btn
-                        a.btn.btn-lg.btn-primary#joinlobby(href="/game") #{lang.landing.join}
-            .row
-               .col-lg-6
-                  br
-                  br
-                  |#{lang.landing.or}
-                  br
-                  br
-                  .btn.btn-lg.btn-default(href="/game/new") #{lang.landing.createlobby}
-   .footer.container
-      | #{lang.landing.authors}
-      br
-      | Pointless links | map | some facebook page | some random ID card thing
+  .intro
+    .container
+      .col-lg-12
+        h1 Card Czar
+        p #{lang.landing.valueprop}
+        .row
+          .col-lg-6
+            .input-group.input-group-lg
+              input.form-control#lobbycode(type="text" placeholder=lang.landing.lobbycode)
+              span.input-group-btn
+                a.btn.btn-lg.btn-primary#joinlobby(href="/game") #{lang.landing.join}
+        .row
+          .col-lg-6
+            br
+            br
+            | #{lang.landing.or}
+            br
+            br
+            .btn.btn-lg.btn-default(href="/game/new") #{lang.landing.createlobby}
+        .row
+          p #{lang.landing.users}
+            span#users
+          p #{lang.landing.games}
+            span#games
+  .footer.container
+    | #{lang.landing.authors}
+    br
+    | Pointless links | map | some facebook page | some random ID card thing
 block scripts
-   script.
-      $('#lobbycode').on('input propertychange paste',function(){
-         console.log("Happened!");
-         $('#joinlobby').attr("href","/game/"+$('#lobbycode').val());
-      })
+  script(src="/js/landing.js")
