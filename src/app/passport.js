@@ -2,29 +2,27 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var models = require("../models");
 var config = require('../config/config.json')[env];
+var Promise = models.Sequelize.Promise;
 
 function login(req, profile, done) {
   models.RemoteLogin.findOne({
     include: [models.User],
     where: {remoteId: profile.id, remoteSource: profile.provider}
   }).then(function (user) {
-    if (!user) throw "no user";
-    done(null, user);
-  }).catch(function () {
-    console.log(req.user);
-    if (req.user) {
-      console.log("we have a user");
-      return models.User.findById(req.user.id);
+    if (!user) {
+      var promise = req.user ?
+        models.User.findById(req.user.id)
+        : models.User.create({
+        name: profile.displayName
+      });
+      return promise.then(function (usr) {
+        return usr.createRemoteLogin({
+          remoteSource: profile.provider,
+          remoteId: profile.id
+        }).then(Promise.resolve(usr));
+      });
     }
-    console.log("No logged user");
-    return models.User.create({
-      name: profile.displayName
-    });
-  }).then(function (user) {
-    return user.createRemoteLogin({
-      remoteSource: profile.provider,
-      remoteId: profile.id
-    });
+    return user;
   }).then(function (user) {
     done(null, user);
   }).catch(function (err) {
