@@ -13,12 +13,40 @@ global.env = process.env.NODE_ENV || 'development';
 var config = require('./config/config.json')[env];
 var sequelize = models.sequelize;
 var passport = require('passport');
+var fs = require('fs');
 
 
 sequelize.authenticate().then(function () {
   console.log("Connected to MySQL");
   //Force sync schema
-  return sequelize.sync({force: false});
+  return sequelize.sync({force: true});
+}).then(function () {
+  models.Deck.count().then(function (c) {
+    if (c == 1) return;
+    models.Deck.create({
+      name: "Base Game"
+    }).then(function (deck) {
+      //These are provided by CaH themselves
+      var white = fs.readFileSync("./src/config/wcards.txt", "utf8").split("<>");
+      var black = fs.readFileSync("./src/config/bcards.txt", "utf8").split("<>");
+      for (var i = 0; i < white.length; i++) {
+        var w = white[i];
+        deck.createCard({
+          text: w,
+          isBlack: false,
+          chooseNum: 0
+        });
+      }
+      for (var j = 0; j < black.length; j++) {
+        var b = black[j];
+        deck.createCard({
+          text: b,
+          isBlack: true,
+          chooseNum: (b.match(/__________/g) || [1]).length
+        });
+      }
+    });
+  });
 });
 
 var app = express();
