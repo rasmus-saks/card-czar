@@ -17,8 +17,8 @@ router.use(function (req, res, next) {
 });
 
 router.get("/users", function (req, res) {
-  models.User.count().then(function (count) {
-    res.success(count);
+  models.sequelize.query("SELECT COUNT(*) AS c FROM users").then(function (count) {
+    res.success(count[0][0].c);
   }).catch(function (err) {
     res.fail(err);
   });

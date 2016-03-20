@@ -19,7 +19,7 @@ var fs = require('fs');
 sequelize.authenticate().then(function () {
   console.log("Connected to MySQL");
   //Force sync schema
-  return sequelize.sync({force: true});
+  return sequelize.sync({force: false});
 }).then(function () {
   models.Deck.count().then(function (c) {
     if (c == 1) return;
