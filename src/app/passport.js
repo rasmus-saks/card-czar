@@ -11,7 +11,7 @@ function login(req, profile, done) {
   }).then(function (user) {
     if (!user) {
       var promise = req.user ?
-        models.User.findById(req.user.id)
+        Promise.resolve(req.user)
         : models.User.create({
         name: profile.displayName
       });
