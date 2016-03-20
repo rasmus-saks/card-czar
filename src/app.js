@@ -74,6 +74,7 @@ app.use(function (req, res, next) {
 
 app.use("/game", require("./routes/game"));
 app.use("/auth", require("./routes/auth"));
+app.use("/api", require("./routes/api"));
 app.use("/", require("./routes/index"));
 
 
