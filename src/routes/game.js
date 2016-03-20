@@ -1,8 +1,9 @@
 var express = require('express');
+var en = require('../locale/en.json');
 var router = express.Router();
 
 router.get("*", function (req, res) {
-  res.render('game');
+  res.render('game', {lang:en});
 });
 
 module.exports = router;
