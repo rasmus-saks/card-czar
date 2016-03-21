@@ -32,14 +32,14 @@ sequelize.authenticate().then(function () {
       for (var i = 0; i < white.length; i++) {
         var w = white[i];
         //Raw INSERT query because we have to..
-        sequelize.query("INSERT INTO Cards (text, isBlack, chooseNum, createdAt, updatedAt) VALUES('" + w.replace("'", "\\'") + "', false, 0, NOW(), NOW())");
+        sequelize.query("INSERT INTO Cards (text, isBlack, chooseNum, createdAt, updatedAt, DeckId) VALUES('" + w.replace("'", "\\'") + "', false, 0, NOW(), NOW(), "+ deck.id + ")");
       }
       for (var j = 0; j < black.length; j++) {
         var b = black[j];
         deck.createCard({
           text: b,
           isBlack: true,
-          chooseNum: (b.match(/__________/g) || [1]).length
+          chooseNum: (b.match(/__________/g) || b.indexOf("superhero/sidekick duo") !== -1 ? [1, 2] : [1]).length
         });
       }
     });
@@ -100,6 +100,7 @@ app.use(function (req, res, next) {
 app.use("/game", require("./routes/game"));
 app.use("/auth", require("./routes/auth"));
 app.use("/api", require("./routes/api"));
+app.use("/deckbrowser", require("./routes/deckbrowser"));
 app.use("/", require("./routes/index"));
 
 

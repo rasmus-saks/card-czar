@@ -1,8 +1,4 @@
-/**
- * Created by AlWilliam on 3/5/2016.
- */
-angular.module('CardCzar.services', []).
-  value('version', '0.1')
+angular.module('CardCzar.services', ['ngResource']).value('version', '0.1')
   .factory('socket', function ($rootScope) {
     var socket = io.connect();
     return {
@@ -25,4 +21,14 @@ angular.module('CardCzar.services', []).
         });
       }
     };
-  });
+  })
+  .factory('Deck', ['$resource', function ($resource) {
+    return $resource("/api/decks", {}, {
+      query: {method: 'GET', isArray: true}
+    });
+  }])
+  .factory('Card', ['$resource', function ($resource) {
+    return $resource("/api/cards", {}, {
+      query: {method: 'GET', isArray: true}
+    });
+  }]);
