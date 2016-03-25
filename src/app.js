@@ -32,7 +32,7 @@ sequelize.authenticate().then(function () {
       for (var i = 0; i < white.length; i++) {
         var w = white[i];
         //Raw INSERT query because we have to..
-        sequelize.query("INSERT INTO Cards (text, isBlack, chooseNum, createdAt, updatedAt, DeckId) VALUES('" + w.replace("'", "\\'") + "', false, 0, NOW(), NOW(), "+ deck.id + ")");
+        sequelize.query("INSERT INTO Cards (text, isBlack, chooseNum, createdAt, updatedAt, DeckId) VALUES(?, false, 0, NOW(), NOW(), ?)", {replacements: [w, deck.id]});
       }
       for (var j = 0; j < black.length; j++) {
         var b = black[j];
