@@ -4,12 +4,21 @@ extends layout
 
 block body
   .game(ng-app="CardCzar" ng-cloak ng-controller="CCMainCtrl as ccmain")
-    .lobby
+    .lobby(ng-hide = "game.status!==0")
       h1 #{lang.game.lobby}
       h1
       .users
         .user(ng-repeat="user in ccmain.users") {{user.name}}
       .btn.btn-primary.btn-lg #{lang.game.startgame}
+    .game(ng-show = "game.status===1")
+      .black-card
+        |{{game.blackcard}}
+      .instruction
+      .white-cards
+        .white-card(ng-repeat="card in ccmain.player.cards")
+          |{{card.text}}
+      
+      
 
 block scripts
   script.
