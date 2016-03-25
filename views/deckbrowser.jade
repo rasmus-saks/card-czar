@@ -1,14 +1,24 @@
 extends layout
 block body
   .deckBrowser(ng-app="CardCzar" ng-cloak ng-controller="CCDeckBrowser as db")
-    .deck(ng-repeat="deck in db.decks") 
+    form(role="form")
+      label.radio-inline
+        input(type="radio" ng-model="db.filter" ng-value="{}" name="optradio")
+        | All
+      label.radio-inline
+        input(type="radio" ng-model="db.filter" ng-value="{isBlack:true}" name="optradio")
+        | Black
+      label.radio-inline
+        input(type="radio" ng-model="db.filter" ng-value="{isBlack:false}" name="optradio")
+        | White
+    .deck(ng-repeat="deck in db.decks" )
       h1 {{deck.name}}
       table.table.table-condensed.table-striped.table-hover
         tr
           th Text
           th Black?
           th Choose number
-        tr(ng-repeat="card in deck.cards")
+        tr(ng-repeat="card in deck.cards | filter: db.filter")
           td {{card.text}}
           td {{card.isBlack}}
           td {{card.chooseNum}}
