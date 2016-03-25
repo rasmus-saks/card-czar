@@ -26,6 +26,9 @@
         selection: cardid
       });
     };
+    ccmain.startgame = function (cardid) {
+      socket.emit('startGame');
+    };
 
   });
   app.controller("CCDeckBrowser", function($scope, $http, Deck, Card) {
