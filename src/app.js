@@ -14,12 +14,15 @@ var config = require('./config/config.json')[env];
 var sequelize = models.sequelize;
 var passport = require('passport');
 var fs = require('fs');
+var SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 
 sequelize.authenticate().then(function () {
   console.log("Connected to MySQL");
   //Force sync schema
-  return sequelize.sync({force: false});
+  return sequelize.query('SET FOREIGN_KEY_CHECKS = 0', {raw: true}).then(function () {
+    return sequelize.sync({force: false})
+  });
 }).then(function () {
   models.Deck.count().then(function (c) {
     if (c == 1) return;
@@ -36,10 +39,13 @@ sequelize.authenticate().then(function () {
       }
       for (var j = 0; j < black.length; j++) {
         var b = black[j];
+        var chooseNum;
+        if (b.indexOf("superhero/sidekick duo") !== -1) chooseNum = 2;
+        else chooseNum = (b.match(/__________/g) || [1]).length;
         deck.createCard({
           text: b,
           isBlack: true,
-          chooseNum: (b.match(/__________/g) || b.indexOf("superhero/sidekick duo") !== -1 ? [1, 2] : [1]).length
+          chooseNum: chooseNum
         });
       }
     });
@@ -68,11 +74,16 @@ app.use(stylus.middleware({
 app.use(express.static(path.join(__dirname, '../public')));
 app.use("/bower_components", express.static(path.join(__dirname, '../bower_components')));
 app.use(flash());
-app.use(session({
+var store = new SequelizeStore({
+  db: sequelize
+});
+var sessionMiddleware = session({
   saveUninitialized: false,
   resave: false,
-  secret: 'x9fgj9aoi8848w0kokc08ws0s'
-}));
+  secret: 'x9fgj9aoi8848w0kokc08ws0s',
+  store: store
+});
+app.use(sessionMiddleware);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -102,6 +113,13 @@ app.use("/auth", require("./routes/auth"));
 app.use("/api", require("./routes/api"));
 app.use("/deckbrowser", require("./routes/deckbrowser"));
 app.use("/", require("./routes/index"));
+
+var port = process.env.PORT || '8081';
+global.io = require("./app/socket")({
+  server: app.listen(port),
+  session: sessionMiddleware,
+  store: store
+});
 
 
 module.exports = app;

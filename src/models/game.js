@@ -6,8 +6,9 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Game.belongsTo(models.User);
-        Game.hasOne(models.User, {as: 'Host', constraints: false});
+        Game.belongsTo(models.User, {as: 'Host', constraints: false});
+        Game.hasOne(models.Card, {as: "BlackCard"});
+        Game.hasMany(models.User);
       }
     }
   });
