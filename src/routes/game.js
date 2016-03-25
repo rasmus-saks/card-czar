@@ -2,30 +2,25 @@ var express = require('express');
 var router = express.Router();
 var util = require("../app/util");
 var models = require("../models");
+var ensureLogin = require("connect-ensure-login").ensureLoggedIn;
 
-router.use(function (req, res, next) {
-  if (!req.user) {
-    res.redirect("/");
-    return;
-  }
-  next();
-});
+router.use(ensureLogin("/auth"));
 
 router.get("/", function (req, res) {
   util.createGame(req.user).then(function (game) {
-    res.redirect("/game/" + game.join_code);
+    res.redirect("/game/" + game.join_code.toUpperCase());
   });
 });
 
 router.get("/:code", function (req, res) {
-  req.code = req.params.code;
-  models.Game.find({join_code: req.params.code})
+  var code = req.params.code.toLowerCase();
+  models.Game.find({join_code: code})
     .then(function (game) {
       if (!game) {
         res.redirect("/");
         return;
       }
-      res.render("game", {code: req.params.code});
+      res.render("game", {code: code});
     });
 });
 

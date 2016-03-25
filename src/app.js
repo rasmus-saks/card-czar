@@ -21,7 +21,7 @@ sequelize.authenticate().then(function () {
   console.log("Connected to MySQL");
   //Force sync schema
   return sequelize.query('SET FOREIGN_KEY_CHECKS = 0', {raw: true}).then(function () {
-    return sequelize.sync({force: false})
+    return sequelize.sync({force: true});
   });
 }).then(function () {
   models.Deck.count().then(function (c) {
@@ -56,7 +56,7 @@ var app = express();
 
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'jade');
-app.use(logger('common'));
+app.use(logger(env == 'production' ? 'common' : 'dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());

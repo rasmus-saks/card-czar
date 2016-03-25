@@ -4,18 +4,18 @@ extends layout
 
 block body
   .game.col-lg-6.col-lg-offset-3(ng-app="CardCzar" ng-cloak ng-controller="CCMainCtrl as ccmain")
-    .lobby(ng-hide = "game.status!==0")
+    .lobby(ng-hide = "ccmain.game.status!==0")
       h1 #{lang.game.lobby}
       h1
       .users
         .user(ng-repeat="user in ccmain.users") {{user.name}}
-      .btn.btn-primary.btn-lg.btn-block(ng-show="ccmain.player.id==ccmain.game.hostid" ng-click="ccmain.startgame") #{lang.game.startgame}
-    .game(ng-show = "game.status===1")
+      .btn.btn-primary.btn-lg.btn-block(ng-show="ccmain.player.id==ccmain.game.HostId" ng-click="ccmain.startgame()") #{lang.game.startgame}
+    .game(ng-show = "ccmain.game.status===1")
       .black-card
-        |{{game.blackcard}}
+        |{{game.blackcard.text}}
       .instruction
       .white-cards
-        .white-card(ng-repeat="card in ccmain.player.cards")
+        .white-card(ng-repeat="card in ccmain.cards")
           |{{card.text}}
 
 block scripts

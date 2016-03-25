@@ -6,7 +6,7 @@ for (var provider in providers) {
   if (!providers.hasOwnProperty(provider)) continue;
   router.get("/" + provider, passport.authenticate(provider, providers[provider]));
   router.get("/" + provider + "/callback", passport.authenticate(provider, {
-    successRedirect: '/',
+    successReturnToOrRedirect: '/',
     failureRedirect: '/auth'
   }));
 }

@@ -55,7 +55,10 @@ module.exports = function (passport) {
   });
 
   passport.deserializeUser(function (id, done) {
-    models.User.findById(id).then(function (user) {
+    models.User.find({
+      where: {id: id},
+      include: [models.Game]
+    }).then(function (user) {
       done(null, user);
     }).catch(function (err) {
       done(err);
