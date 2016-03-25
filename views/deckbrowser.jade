@@ -3,13 +3,13 @@ block body
   .deckBrowser(ng-app="CardCzar" ng-cloak ng-controller="CCDeckBrowser as db")
     form(role="form")
       label.radio-inline
-        input(type="radio" ng-model="db.filter" ng-value="{}" name="optradio")
+        input(type="radio" ng-model="db.filter" ng-value="" name="optradio")
         | All
       label.radio-inline
-        input(type="radio" ng-model="db.filter" ng-value="{isBlack:true}" name="optradio")
+        input(type="radio" ng-model="db.filter" ng-value="true" name="optradio")
         | Black
       label.radio-inline
-        input(type="radio" ng-model="db.filter" ng-value="{isBlack:false}" name="optradio")
+        input(type="radio" ng-model="db.filter" ng-value="false" name="optradio")
         | White
     .deck(ng-repeat="deck in db.decks" )
       h1 {{deck.name}}
@@ -18,7 +18,7 @@ block body
           th Text
           th Black?
           th Choose number
-        tr(ng-repeat="card in deck.cards | filter: db.filter")
+        tr(ng-repeat="card in deck.cards | filter: {isBlack:db.filter}")
           td {{card.text}}
           td {{card.isBlack}}
           td {{card.chooseNum}}

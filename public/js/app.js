@@ -41,23 +41,19 @@
 
     hash = document.URL.substr(document.URL.indexOf('#') + 1);
     if (hash === "black") {
-      this.filter = {isBlack: true};
+      this.filter = true;
     } else if (hash === "white") {
-      this.filter = {isBlack: false};
+      this.filter = false;
     } else {
-      this.filter = {};
+      this.filter = undefined;
     }
 
     $scope.$watch("db.filter", function (value) {
-      console.log(0);
-      if (typeof value.isBlack === 'undefined' || value.isBlack === null ) {
-        console.log(1);
+      if (typeof value === 'undefined') {
         window.location.hash = "all";
-      } else if (value.isBlack) {
-        console.log(2);
+      } else if (value) {
         window.location.hash = "black"
       } else {
-        console.log(3);
         window.location.hash = "white"
       }
     });
