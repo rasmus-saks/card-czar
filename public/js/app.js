@@ -31,12 +31,35 @@
     };
 
   });
-  app.controller("CCDeckBrowser", function($scope, $http, Deck, Card) {
-    this.decks = Deck.query(function() {
+  app.controller("CCDeckBrowser", function ($scope, $http, Deck, Card) {
+    this.decks = Deck.query(function () {
       for (var i = 0; i < this.decks.length; i++) {
         var deck = this.decks[i];
         deck.cards = Card.query({deck: deck.id});
       }
     }.bind(this));
+
+    hash = document.URL.substr(document.URL.indexOf('#') + 1);
+    if (hash === "black") {
+      this.filter = {isBlack: true};
+    } else if (hash === "white") {
+      this.filter = {isBlack: false};
+    } else {
+      this.filter = {};
+    }
+
+    $scope.$watch("db.filter", function (value) {
+      console.log(0);
+      if (typeof value.isBlack === 'undefined' || value.isBlack === null ) {
+        console.log(1);
+        window.location.hash = "all";
+      } else if (value.isBlack) {
+        console.log(2);
+        window.location.hash = "black"
+      } else {
+        console.log(3);
+        window.location.hash = "white"
+      }
+    });
   });
 })();
