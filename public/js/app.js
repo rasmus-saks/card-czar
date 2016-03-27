@@ -1,6 +1,6 @@
 (function () {
   var app = angular.module('CardCzar', ['CardCzar.filters', 'CardCzar.services']);
-  app.controller("CCMainCtrl", function AppCtrl($scope, $http, socket) {
+  app.controller("CCGame", function AppCtrl($scope, $http, socket) {
     //operation initiated when controller is constructed
     socket.emit('join', lobbycode);
     var ccmain = this;
@@ -76,10 +76,10 @@
       }
     });
   });
-  app.controller("CCLanding", function($scope, $http, User) {
-    var landing = this;
+  app.controller("CCMain", function($scope, $http, User) {
+    var main = this;
     this.user = User.query(function() {
-      landing.loaded = true;
+      main.loaded = true;
     });
   });
 })();

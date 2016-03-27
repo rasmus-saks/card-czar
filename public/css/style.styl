@@ -2,12 +2,24 @@ cc-black = #191919
 cc-white = #f7f7f7
 h1
   font-size 30pt
+html
+  position relative
+  min-height 100%
+footer
+  position absolute
+  bottom 0
+  padding 10px 0
+  width 100%
+  background-color cc-black
+  color cc-white
+
 body
   font-family "pragmatica-web","Helvetica Neue",Arial,sans-serif
   font-size 16px
   line-height 1.42857143
   background-color cc-white
   color cc-black
+  margin-bottom 60px
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
   display none !important;
 
@@ -33,11 +45,8 @@ body
     border-radius 0
     background-color cc-black
     color cc-white
-    border 3px solid cc-white
     font-weight 600
     min-width 90px
-    //margin-top 21px
-    //margin-bottom 21px
     margin-left 3px
     margin-right 3px
     &:hover
@@ -49,9 +58,15 @@ body
   background-color cc-black
   color cc-white
   font-weight 600
+  border none
+  &.invert
+    box-shadow: inset 0 0 0 3px cc-white
+    &:hover
+      box-shadow: inset 0 0 0 3px cc-white
   &:hover
-    color cc-white
-    text-decoration underline
+    color cc-black
+    background-color cc-white
+    box-shadow: inset 0 0 0 3px cc-black
 
 .navbar-text
   margin-top 29px
@@ -60,6 +75,10 @@ body
     font-weight 600
 .form-control
   border 3px solid cc-black
+  border-right none
 
 .input-group-lg>.form-control, .input-group-lg>.input-group-addon, .input-group-lg>.input-group-btn>.btn
   border-radius 0
+
+.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group
+  margin-right -1px

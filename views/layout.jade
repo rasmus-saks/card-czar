@@ -10,8 +10,34 @@ head
   script.
     try{Typekit.load({ async: false });}catch(e){}
 body
-  body(ng-app="CardCzar" ng-controller=(controller ? controller : undefined))
-    block body
+  body(ng-app="CardCzar" ng-controller="CCMain as main")
+    .navbar
+      .container
+        .col-lg-12
+          .navbar-header
+            button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false")
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand Card Czar
+          .collapse.navbar-collapse#navbar-collapse
+            ul.nav.navbar-nav.navbar-right(ng-cloak ng-show="main.loaded")
+              li
+                p.navbar-text(ng-show="main.user.id") Logged in as 
+                  span#user {{main.user.name}}
+              li
+                a.btn.navbar-btn.invert(ng-show="main.user.id" href="/auth/logout") Log out
+              li
+                a.btn.navbar-btn.invert(ng-hide="main.user.id" href="/auth") Log in
+    .container
+      block body
+    footer
+      .container
+        p
+          | #{lang.landing.authors}
+          br
+          | Pointless links | map | some facebook page | some random ID card thing
   block scripts
     script(src="/bower_components/jquery/dist/jquery.min.js")
     script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
