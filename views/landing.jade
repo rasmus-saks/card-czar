@@ -32,7 +32,7 @@ block body
         .row
           .col-lg-6
             .input-group.input-group-lg.landing-button-adjustment
-              input.form-control#lobbycode(type="text" placeholder=lang.landing.lobbycode ng-model="main.lobbycode")
+              input.form-control#lobbycode(type="text" placeholder=lang.landing.lobbycode title=lang.landing.lobbycode ng-model="main.lobbycode")
               span.input-group-btn
                 a.btn.btn-lg#joinlobby(ng-href="{{'/game/' + main.lobbycode}}") #{lang.landing.join}
         .row
