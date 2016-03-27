@@ -32,9 +32,9 @@ block body
         h1 #{lang.login.login}
         a.btn.btn-lg.btn-block(href="/auth/facebook?returnTo=" + encodeURIComponent(req.query.returnTo)) Facebook
         a.btn.btn-lg.btn-block(href="/auth/google?returnTo=" + encodeURIComponent(req.query.returnTo)) Google
-        a.btn.btn-lg.btn-block(disabled) Twitter
-        a.btn.btn-lg.btn-block(disabled) #{lang.login.banklink}
-        a.btn.btn-lg.btn-block(disabled) #{lang.login.mobileid}
+        a.btn.btn-lg.btn-block.disabled Twitter
+        a.btn.btn-lg.btn-block.disabled #{lang.login.banklink}
+        a.btn.btn-lg.btn-block.disabled #{lang.login.mobileid}
       
   footer
     .container
