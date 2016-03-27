@@ -1,8 +1,6 @@
 //
    Created by AlWilliam on 3/5/2016.
 extends layout
-block vars
-  - var controller = "CCLanding as landing";
 block body
   .navbar
     .container
@@ -30,18 +28,18 @@ block body
         .row
           .col-lg-6
             .input-group.input-group-lg.landing-button-adjustment
-              input.form-control#lobbycode(type="text" placeholder=lang.landing.lobbycode)
+              input.form-control#lobbycode(type="text" placeholder=lang.landing.lobbycode ng-model="main.lobbycode")
               span.input-group-btn
-                a.btn.btn-lg#joinlobby(href="/game") #{lang.landing.join}
+                a.btn.btn-lg#joinlobby(ng-href="{{'/game/' + main.lobbycode}}") #{lang.landing.join}
         .row
           .col-lg-6#createLobby
             .btn.btn-lg.btn-block.landing-button-adjustment(href="/game/new") #{lang.landing.createlobby}
         .row
           .col-lg-6
             p #{lang.landing.users}
-              span#users
+              span#users {{ main.usercount }}
             p #{lang.landing.games}
-              span#games
+              span#games {{ main.gamecount }}
   footer
     .container
       p

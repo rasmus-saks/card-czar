@@ -23,6 +23,7 @@ router.get("/user", function (req, res) {
   res.success(req.user);
 });
 router.get("/users", function (req, res) {
+  //Raw COUNT(*) query because we have to..
   models.sequelize.query("SELECT COUNT(*) AS c FROM users").then(function (count) {
     res.success(count[0][0].c);
   }).catch(function (err) {
@@ -59,6 +60,15 @@ router.get("/cards", function (req, res) {
     return deck.getCards().then(function (cards) {
       res.success(cards);
     });
+  }).catch(function (err) {
+    res.fail(err);
+  });
+});
+
+router.get("/allCards", function (req, res) {
+  //Raw JOIN query because we have to..
+  models.sequelize.query("SELECT cards.id, isBlack, chooseNum, text, name, DeckId FROM cards JOIN decks ON cards.DeckId = decks.id", { type: models.sequelize.QueryTypes.SELECT}).then(function(cards) {
+    res.success(cards);
   }).catch(function (err) {
     res.fail(err);
   });

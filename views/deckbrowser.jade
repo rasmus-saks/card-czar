@@ -11,14 +11,15 @@ block body
       label.radio-inline
         input(type="radio" ng-model="db.filter" ng-value="false" name="optradio")
         | White
-    .deck(ng-repeat="deck in db.decks" )
-      h1 {{deck.name}}
+    .deck
       table.table.table-condensed.table-striped.table-hover
         tr
+          th Deck
           th Text
           th Black?
           th Choose number
-        tr(ng-repeat="card in deck.cards | filter: {isBlack:db.filter}")
+        tr(ng-repeat="card in db.cards | filter: {isBlack:db.filter}")
+          td {{card.name}}
           td {{card.text}}
           td {{card.isBlack}}
           td {{card.chooseNum}}

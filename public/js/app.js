@@ -49,13 +49,8 @@
     };
 
   });
-  app.controller("CCDeckBrowser", function ($scope, $http, Deck, Card) {
-    this.decks = Deck.query(function () {
-      for (var i = 0; i < this.decks.length; i++) {
-        var deck = this.decks[i];
-        deck.cards = Card.query({deck: deck.id});
-      }
-    }.bind(this));
+  app.controller("CCDeckBrowser", function ($scope, $http, AllCards) {
+    this.cards = AllCards.query();
 
     hash = document.URL.substr(document.URL.indexOf('#') + 1);
     if (hash === "black") {
@@ -76,10 +71,16 @@
       }
     });
   });
-  app.controller("CCMain", function($scope, $http, User) {
+  app.controller("CCMain", function($scope, $http, User, Users, TotalGames) {
     var main = this;
     this.user = User.query(function() {
       main.loaded = true;
+    });
+    Users.query(function(data) {
+      main.usercount = data.data;
+    });
+    TotalGames.query(function(data) {
+      main.gamecount = data.data;
     });
   });
 })();
