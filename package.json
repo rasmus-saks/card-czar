@@ -10,7 +10,8 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^1.0.0",
-    "grunt-exec": "^0.4.6"
+    "grunt-exec": "^0.4.6",
+    "browser-sync": "^2.11.2"
   },
   "author": "Waystone OÜ <hello@waystone.io>",
   "scripts": {
@@ -19,7 +20,6 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
     "body-parser": "^1.15.0",
-    "browser-sync": "^2.11.2",
     "chalk": "^1.1.1",
     "compression": "^1.6.1",
     "connect-browser-sync": "^2.0.1",
