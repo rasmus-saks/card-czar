@@ -65,13 +65,13 @@ function Socket(options) {
             game.status = 1;
             util.chooseBlackCard(game).then(function (game) {
               function drawCards(u) {
-                util.drawCards(u, 10).then(function (cards) {
+                return util.drawCards(u, 10).then(function (cards) {
                   io.to(u.User.socketId).emit('status', {
                     cards: cards
                   });
                 });
               }
-
+              var proms = Promise.resolve();
               for (var i = 0; i < players.length; i++) {
                 let u = players[i];
                 if (i !== 0) u.status = 0; //Picking
@@ -80,11 +80,13 @@ function Socket(options) {
                   users: players.map(p => p.User),
                   game: game
                 });
-                drawCards(u);
+                proms.then(drawCards(u));
               }
+              return proms;
+            }).then(function() {
+              players.map(u => u.save());
+              game.save();
             });
-            players.map(u => u.save());
-            game.save();
           });
         }).catch(function (err) {
         socket.emit("error", err);
