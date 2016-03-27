@@ -2,17 +2,35 @@
    Created by AlWilliam on 3/5/2016.
 extends layout
 block body
+  .navbar
+    .container-fluid
+      .col-lg-6.col-lg-offset-3
+        .navbar-header
+          button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false")
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand Card Czar
+        .collapse.navbar-collapse#navbar-collapse
+          ul.nav.navbar-nav.navbar-right
+            li
+              p.navbar-text Logged in as 
+                span#user [x]
+              p.navbar-text
+                a Log out
+              p.navbar-text
+                a Log in
   .intro
-    .container
-      .col-lg-12
-        h1 Card Czar
+    .container-fluid
+      .col-lg-6.col-lg-offset-3
         p #{lang.landing.valueprop}
         .row
           .col-lg-6
             .input-group.input-group-lg
               input.form-control#lobbycode(type="text" placeholder=lang.landing.lobbycode)
               span.input-group-btn
-                a.btn.btn-lg.btn-primary#joinlobby(href="/game") #{lang.landing.join}
+                a.btn.btn-lg#joinlobby(href="/game") #{lang.landing.join}
         .row
           .col-lg-6
             br
@@ -20,16 +38,19 @@ block body
             | #{lang.landing.or}
             br
             br
-            .btn.btn-lg.btn-default(href="/game/new") #{lang.landing.createlobby}
+            .btn.btn-lg.btn-block(href="/game/new") #{lang.landing.createlobby}
+            br
+            br
         .row
           .col-lg-6
             p #{lang.landing.users}
               span#users
             p #{lang.landing.games}
               span#games
-  .footer.container
-    | #{lang.landing.authors}
-    br
-    | Pointless links | map | some facebook page | some random ID card thing
+  .footer.container-fluid
+    .col-lg-6.col-lg-offset-3
+      | #{lang.landing.authors}
+      br
+      | Pointless links | map | some facebook page | some random ID card thing
 block scripts
   script(src="/js/landing.js")
