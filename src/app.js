@@ -61,6 +61,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(compression());
+if (config.baseUrl.indexOf("localhost") != -1) {
+  var browserSync = require('browser-sync');
+  var bs = browserSync(
+    {
+      logSnippet: false,
+      files: ["public/css/*.styl", "views/*.jade", "public/js/*.js"]
+    }
+  );
+  app.use(require('connect-browser-sync')(bs));
+}
 app.use(stylus.middleware({
   src: path.join(__dirname, '../public/css'),
   compress: true,
@@ -113,6 +123,7 @@ app.use("/auth", require("./routes/auth"));
 app.use("/api", require("./routes/api"));
 app.use("/deckbrowser", require("./routes/deckbrowser"));
 app.use("/", require("./routes/index"));
+
 
 var port = process.env.PORT || '8081';
 global.io = require("./app/socket")({

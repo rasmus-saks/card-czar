@@ -1,10 +1,10 @@
 'use strict';
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   var Deck = sequelize.define('Deck', {
     name: DataTypes.STRING
   }, {
     classMethods: {
-      associate: function(models) {
+      associate: function (models) {
         Deck.hasMany(models.Card);
       }
     }

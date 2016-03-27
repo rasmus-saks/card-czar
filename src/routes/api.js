@@ -13,7 +13,7 @@ router.use(function (req, res, next) {
     });
   };
   res.fail = function (err) {
-    res.status(500).json({
+    res.json({
       error: err.toString()
     });
   };

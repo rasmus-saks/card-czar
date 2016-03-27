@@ -3,6 +3,7 @@ var socket_io = require('socket.io');
 var passportSocketIo = require("passport.socketio");
 var models = require("../models");
 var util = require("../app/util");
+var Promise = models.Sequelize.Promise;
 function Socket(options) {
   var io = socket_io(options.server);
   io.use(passportSocketIo.authorize({
@@ -15,23 +16,41 @@ function Socket(options) {
     socket.on("join", function (code) {
       code = code.toLowerCase();
       joinCode = code;
-      models.Game.find({where: {join_code: code}})
+      models.Game.find({where: {join_code: code}, include: [{all: true}]})
         .then(function (game) {
           if (!game) throw "No game found";
-          return user.setGame(game).then(function (user) {
-            return game.getUsers().then(function (users) {
-              socket.join(game.join_code);
-              socket.emit("init", {
-                player: user,
-                lobbycode: game.join_code,
-                users: users,
-                game: game
+          user.reload().then(function (user) {
+            user.getPlayers({include: [{all: true}]}).then(function (players) {
+              if (!players || !players.some(p => p.Game.id == game.id)) {
+                return user.createPlayer();
+              }
+              return Promise.resolve(players.find(p => p.Game.id == game.id));
+            }).then(function (player) {
+              return player.setGame(game).then(function (player) {
+                return game.getPlayers({include: [{all: true}]}).then(function (players) {
+                  return player.getHandCards().then(function (handCards) {
+                    console.log("SESSION");
+                    console.log(user.sessionId);
+                    players = players.map(p => p.User);
+                    if (user.sessionId) {
+                      io.to(user.sessionId).disconnect();
+                    }
+                    socket.join(game.join_code);
+                    socket.emit('status', {
+                      player: user,
+                      lobbycode: game.join_code,
+                      users: players,
+                      game: game,
+                      cards: handCards
+                    });
+                    socket.broadcast.to(code).emit("status", {
+                      users: players
+                    });
+                    user.socketId = socket.id;
+                    return user.save();
+                  });
+                });
               });
-              socket.broadcast.to(code).emit("updateusers", {
-                users: users
-              });
-              user.socketId = socket.id;
-              return user.save();
             });
           });
         });
@@ -39,24 +58,27 @@ function Socket(options) {
     socket.on("startGame", function () {
       models.Game.find({where: {join_code: joinCode}})
         .then(function (game) {
-          game.getUsers().then(function (users) {
-            users[0].status = 1; //Card czar
+          game.getPlayers({include: [{all: true}]}).then(function (players) {
+            players[0].status = 1; //Card czar
             game.status = 1;
-            for (var i = 0; i < users.length; i++) {
-              let u = users[i];
-              if (i != 0) u.status = 0; //Picking
-              io.to(u.socketId).emit('newround', {
-                player: u,
-                users: users,
-                game: game
-              });
-              util.drawCards(u, 10).then(function (cards) {
-                io.to(u.socketId).emit('updatecards', {
-                  cards: cards
+            util.chooseBlackCard(game).then(function (game) {
+              for (var i = 0; i < players.length; i++) {
+                let u = players[i];
+                if (i != 0) u.status = 0; //Picking
+                console.log(game.getBlackCard());
+                io.to(u.User.socketId).emit('status', {
+                  player: u,
+                  users: players.map(p => p.User),
+                  game: game
                 });
-              });
-            }
-            users.map(u => u.save());
+                util.drawCards(u, 10).then(function (cards) {
+                  io.to(u.User.socketId).emit('status', {
+                    cards: cards
+                  });
+                });
+              }
+            });
+            players.map(u => u.save());
             game.save();
           });
         });
@@ -76,7 +98,7 @@ function Socket(options) {
           .then(user.getHandCards())
           .then(function (cards) {
             user.status = 2; //Waiting
-            socket.emit('updatecards', {
+            socket.emit('status', {
               cards: cards
             });
 
@@ -94,12 +116,12 @@ function Socket(options) {
                 if (u.status == 1) {
                   u.status = 3; //Card czar picking
                   u.save();
-                  io.to(joinCode).emit('updateusers', {
+                  io.to(joinCode).emit('status', {
                     users: users
                   });
                   game.getPickedCards().then(function (picked) {
-                    io.to(joinCode).emit('displayCards', {
-                      cards: picked
+                    io.to(joinCode).emit('status', {
+                      shownCards: picked
                     });
                   });
                   break;
@@ -110,7 +132,7 @@ function Socket(options) {
       });
     });
     socket.on('selectWinner', function (winner) {
-      
+
     });
     socket.on("disconnect", function () {
       user.socketId = null;

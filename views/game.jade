@@ -12,7 +12,7 @@ block body
       .btn.btn-primary.btn-lg.btn-block(ng-show="ccmain.player.id==ccmain.game.HostId" ng-click="ccmain.startgame()") #{lang.game.startgame}
     .game(ng-show = "ccmain.game.status===1")
       .black-card
-        |{{game.blackcard.text}}
+        |{{ccmain.game.BlackCard.text}}
       .instruction
       .white-cards
         .white-card(ng-repeat="card in ccmain.cards")
