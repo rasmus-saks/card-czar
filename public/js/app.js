@@ -7,26 +7,40 @@
 
     ccmain.hello = "Hello,";
     socket.on('init', function (data) {
+      console.log("init");
+      console.log(data);
       ccmain.player = data.player;
       ccmain.users = data.users;
       ccmain.lobbycode = data.lobbycode;
       ccmain.game = data.game;
     });
     socket.on('newround', function (data) {
+      console.log("newround");
+      console.log(data);
       ccmain.player = data.player;
       ccmain.users = data.users;
       ccmain.game = data.game;
     });
     socket.on('updateplayers', function (data) {
+      console.log("updateplayers");
+      console.log(data);
       ccmain.player = data.player;
     });
+    socket.on('updateusers', function (data) {
+      console.log("updateusers");
+      console.log(data);
+      ccmain.users = data.users;
+    });
+    socket.on('updatecards', function(data) {
+      ccmain.cards = data.cards;
+    });
 
-    ccmain.selectCard = function (cardid) {
-      socket.emit('send:cardSelection', {
-        selection: cardid
+    ccmain.selectCards = function (cards) {
+      socket.emit('pickCards', {
+        cards: cards
       });
     };
-    ccmain.startgame = function (cardid) {
+    ccmain.startgame = function () {
       socket.emit('startGame');
     };
 

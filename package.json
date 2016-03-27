@@ -21,6 +21,7 @@
     "body-parser": "^1.15.0",
     "chalk": "^1.1.1",
     "compression": "^1.6.1",
+    "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
     "connect-session-sequelize": "^3.0.0",
     "cookie-parser": "^1.4.1",
