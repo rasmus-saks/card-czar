@@ -107,16 +107,19 @@ app.use(function (req, res, next) {
   //Get language file
   if (req.query.lang) {
     try {
-      req.lang = require("./locale/" + req.query.lang + ".json");
+      console.log("./locale/" + req.query.lang + ".json");
+      res.locals.lang = require("./locale/" + req.query.lang + ".json");
+      console.log("./locale/" + req.query.lang + ".json");
+      res.locals.nextLang = req.query.lang == "en" ? "af" : "en";
       next();
       return;
     } catch (ignored) {
 
     }
   }
-  req.lang = require("./locale/en.json");
+  res.locals.lang = require("./locale/en.json");
   //Load into jade
-  res.locals.lang = req.lang;
+  res.locals.nextLang = "af";
   next();
 });
 

@@ -16,9 +16,9 @@ block body
           ul.nav.navbar-nav.navbar-right(ng-cloak ng-show="main.loaded")
             li.flag
               p.navbar-text
-                a #{lang.lang}
+                a#lang(href="/?lang=" + nextLang) #{nextLang.toUpperCase()}
             li
-              p.navbar-text(ng-show="main.user.id") Logged in as #{lang.nav.loggedinas}
+              p.navbar-text(ng-show="main.user.id") #{lang.nav.loggedinas}
                 span#user {{main.user.name}}
             li
               a.btn.navbar-btn.invert(ng-show="main.user.id" href="/auth/logout") #{lang.nav.logout}
