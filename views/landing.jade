@@ -14,6 +14,9 @@ block body
           a.navbar-brand(href="/") Card Czar
         .collapse.navbar-collapse#navbar-collapse
           ul.nav.navbar-nav.navbar-right(ng-cloak ng-show="main.loaded")
+            li.flag
+              p.navbar-text
+                a #{lang.lang}
             li
               p.navbar-text(ng-show="main.user.id") Logged in as #{lang.nav.loggedinas}
                 span#user {{main.user.name}}
@@ -21,6 +24,7 @@ block body
               a.btn.navbar-btn.invert(ng-show="main.user.id" href="/auth/logout") #{lang.nav.logout}
             li
               a.btn.navbar-btn.invert(ng-hide="main.user.id" href="/auth") #{lang.nav.login}
+
   .intro
     .container
       .col-lg-8.col-lg-offset-2

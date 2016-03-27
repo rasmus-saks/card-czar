@@ -15,6 +15,9 @@ block body
           a.navbar-brand(href="/") Card Czar
         .collapse.navbar-collapse#navbar-collapse
           ul.nav.navbar-nav.navbar-right(ng-cloak ng-show="main.loaded")
+            li.flag
+              p.navbar-text
+                a #{lang.lang}
             li
               p.navbar-text(ng-show="main.user.id") Logged in as #{lang.nav.loggedinas}
                 span#user {{main.user.name}}
