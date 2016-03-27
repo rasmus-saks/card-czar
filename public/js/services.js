@@ -22,8 +22,8 @@ angular.module('CardCzar.services', ['ngResource']).value('version', '0.1')
       }
     };
   })
-  .factory('Deck', ['$resource', function ($resource) {
-    return $resource("/api/decks", {}, {
+  .factory('AllCards', ['$resource', function ($resource) {
+    return $resource("/api/allCards", {}, {
       query: {method: 'GET', isArray: true}
     });
   }])
@@ -34,6 +34,16 @@ angular.module('CardCzar.services', ['ngResource']).value('version', '0.1')
   }])
   .factory('User', function ($resource) {
     return $resource("/api/user", {}, {
+      query: {method: 'GET'}
+    });
+  })
+  .factory('Users', function ($resource) {
+    return $resource("/api/users", {}, {
+      query: {method: 'GET'}
+    });
+  })
+  .factory('TotalGames', function ($resource) {
+    return $resource("/api/totalgames", {}, {
       query: {method: 'GET'}
     });
   });

@@ -1,5 +1,4 @@
 var models = require("../models");
-var Promise = models.Sequelize.Promise;
 function randomString(length) {
   return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
 }
@@ -20,7 +19,7 @@ var util = {
           });
         });
       return util.createGame(host);
-    })
+    });
   },
   getRemainingCards: function (game, black) {
     if (!game) throw "No game";
@@ -50,16 +49,13 @@ var util = {
     return player.getGame({include: [{all: true}]}).then(function (game) {
       return util.getRemainingCards(game)
         .then(function (cards) {
-          var prom = [];
           var drawn = [];
           for (var i = 0; i < num; i++) {
             var idx = Math.floor(Math.random() * cards.length);
-            prom.push(player.addHandCard(cards[idx]));
-            prom.push(game.addPlayedCard(cards[idx]));
             drawn.push(cards[idx]);
             cards.splice(idx, 1);
           }
-          return Promise.all(prom).then(() => player.save()).then(() => game.save()).then(() => player.getHandCards());
+          return Promise.all([player.addHandCards(drawn), game.addPlayedCards(drawn)]).then(() => player.save()).then(() => game.save()).then(() => player.getHandCards());
         });
     });
   },
