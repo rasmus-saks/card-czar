@@ -62,11 +62,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(compression());
 if (config.baseUrl.indexOf("localhost") != -1) {
-  var browserSync = require('browser-sync');
-  var bs = browserSync(
+  var bs = require('browser-sync').create();
+  bs.init(
     {
       logSnippet: false,
-      files: ["public/css/*.styl", "views/*.jade", "public/js/*.js"]
+      files: ["public/css/*.styl", "views/*.jade", "public/js/*.js"],
+      ghostMode: false
     }
   );
   app.use(require('connect-browser-sync')(bs));
