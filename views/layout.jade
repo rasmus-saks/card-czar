@@ -1,4 +1,5 @@
 doctype html
+block vars
 head
   meta(charset="utf-8")
   title Card Czar
@@ -9,7 +10,7 @@ head
   script.
     try{Typekit.load({ async: false });}catch(e){}
 body
-  body(ng-app="CardCzar")
+  body(ng-app="CardCzar" ng-controller=(controller ? controller : undefined))
     block body
   block scripts
     script(src="/bower_components/jquery/dist/jquery.min.js")

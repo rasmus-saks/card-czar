@@ -1,9 +1,10 @@
 //
    Created by AlWilliam on 3/5/2016.
 extends layout
-
+block vars
+  - var controller = "CCMainCtrl as ccmain";
 block body
-  .game.col-lg-6.col-lg-offset-3(ng-cloak ng-controller="CCMainCtrl as ccmain")
+  .game.col-lg-6.col-lg-offset-3
     .lobby(ng-hide = "ccmain.game.status!==0")
       h1 #{lang.game.lobby}
       h1

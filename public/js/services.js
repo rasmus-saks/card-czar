@@ -31,4 +31,9 @@ angular.module('CardCzar.services', ['ngResource']).value('version', '0.1')
     return $resource("/api/cards", {}, {
       query: {method: 'GET', isArray: true}
     });
-  }]);
+  }])
+  .factory('User', function ($resource) {
+    return $resource("/api/user", {}, {
+      query: {method: 'GET'}
+    });
+  });

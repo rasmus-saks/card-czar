@@ -11,6 +11,13 @@ for (var provider in providers) {
   }));
 }
 
+router.get("/logout", function (req, res) {
+  req.session.destroy(function (err) {
+    if (err) throw err;
+    res.redirect("/");
+  });
+});
+
 router.get("*", function (req, res) {
   console.log(req.user && req.user.id);
   res.render("login");

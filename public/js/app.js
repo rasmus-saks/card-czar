@@ -76,4 +76,10 @@
       }
     });
   });
+  app.controller("CCLanding", function($scope, $http, User) {
+    var landing = this;
+    this.user = User.query(function() {
+      landing.loaded = true;
+    });
+  });
 })();

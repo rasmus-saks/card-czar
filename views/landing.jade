@@ -1,6 +1,8 @@
 //
    Created by AlWilliam on 3/5/2016.
 extends layout
+block vars
+  - var controller = "CCLanding as landing";
 block body
   .navbar
     .container-fluid
@@ -13,12 +15,14 @@ block body
             span.icon-bar
           a.navbar-brand Card Czar
         .collapse.navbar-collapse#navbar-collapse
-          ul.nav.navbar-nav.navbar-right
+          ul.nav.navbar-nav.navbar-right(ng-cloak ng-show="landing.loaded")
             li
-              p.navbar-text Logged in as 
-                span#user [x]
-              button.btn.navbar-btn Log out
-              button.btn.navbar-btn Log in
+              p.navbar-text(ng-show="landing.user.id") Logged in as 
+                span#user {{landing.user.name}}
+            li 
+              a.btn.navbar-btn(ng-show="landing.user.id" href="/auth/logout") Log out
+            li
+              a.btn.navbar-btn(ng-hide="landing.user.id" href="/auth") Log in
   .intro
     .container-fluid
       .col-lg-6.col-lg-offset-3
