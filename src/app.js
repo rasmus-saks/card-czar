@@ -21,7 +21,7 @@ sequelize.authenticate().then(function () {
   console.log("Connected to MySQL");
   //Force sync schema
   return sequelize.query('SET FOREIGN_KEY_CHECKS = 0', {raw: true}).then(function () {
-    return sequelize.sync({force: true});
+    return sequelize.sync({force: false});
   });
 }).then(function () {
   models.Deck.count().then(function (c) {
@@ -62,7 +62,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(compression());
 app.use(stylus.middleware({
-  src: path.join(__dirname, 'public/css'),
+  src: path.join(__dirname, '../public/css'),
   compress: true,
   compile: function (str, path) {
     return stylus(str)
