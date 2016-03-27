@@ -16,8 +16,9 @@ router.get("/:code", function (req, res) {
   var code = req.params.code.toLowerCase();
   models.Game.find({where: {join_code: code}})
     .then(function (game) {
+      if (!game) return res.redirect("/");
       return game.getPlayers({include: [{all: true}]}).then(function (players) {
-        if (!game || game.status != 0 && !players.some(p => p.User.id == req.user.id)) {
+        if (!game || game.status !== 0 && !players.some(p => p.User.id == req.user.id)) {
           res.redirect("/");
           return;
         }

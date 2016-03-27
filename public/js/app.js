@@ -70,9 +70,9 @@
       if (typeof value === 'undefined') {
         window.location.hash = "all";
       } else if (value) {
-        window.location.hash = "black"
+        window.location.hash = "black";
       } else {
-        window.location.hash = "white"
+        window.location.hash = "white";
       }
     });
   });

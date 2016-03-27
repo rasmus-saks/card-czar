@@ -14,7 +14,7 @@ for (var provider in providers) {
 router.get("/logout", function (req, res) {
   req.session.destroy(function (err) {
     if (err) throw err;
-    res.redirect("/");
+    res.redirect(req.query.returnTo || "/");
   });
 });
 

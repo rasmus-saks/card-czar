@@ -61,7 +61,7 @@ router.get("/cards", function (req, res) {
     });
   }).catch(function (err) {
     res.fail(err);
-  })
+  });
 });
 
 module.exports = router;

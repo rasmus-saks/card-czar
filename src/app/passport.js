@@ -2,7 +2,6 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var models = require("../models");
 var config = require('../config/config.json')[env];
-var Promise = models.Sequelize.Promise;
 
 function login(req, profile, done) {
   models.RemoteLogin.findOne({
