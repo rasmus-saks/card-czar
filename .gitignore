@@ -88,5 +88,5 @@ src/app/config.js
 src/config/config.json
 src/migrations/*
 .ebextensions/*
-*.css
+public/*.css
 .ebignore
