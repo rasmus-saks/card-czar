@@ -3,7 +3,7 @@
 extends layout
 
 block body
-  .game.col-lg-6.col-lg-offset-3(ng-app="CardCzar" ng-cloak ng-controller="CCMainCtrl as ccmain")
+  .game.col-lg-6.col-lg-offset-3(ng-cloak ng-controller="CCMainCtrl as ccmain")
     .lobby(ng-hide = "ccmain.game.status!==0")
       h1 #{lang.game.lobby}
       h1
@@ -18,12 +18,7 @@ block body
         .white-card(ng-repeat="card in ccmain.cards")
           |{{card.text}}
 
-block scripts
+prepend scripts
   script.
     var lobbycode = "!{code}";
-  script(src="/bower_components/angular/angular.min.js")
-  script(src="/js/app.js")
-  script(src="/js/filters.js")
-  script(src="/js/services.js")
   script(src="/socket.io/socket.io.js")
-  script(src="/bower_components/angular-resource/angular-resource.min.js")

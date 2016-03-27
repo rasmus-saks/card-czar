@@ -9,8 +9,13 @@ head
   script.
     try{Typekit.load({ async: false });}catch(e){}
 body
-  body
+  body(ng-app="CardCzar")
     block body
-  script(src="/bower_components/jquery/dist/jquery.min.js")
-  script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
   block scripts
+    script(src="/bower_components/jquery/dist/jquery.min.js")
+    script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
+    script(src="/bower_components/angular/angular.min.js")
+    script(src="/js/app.js")
+    script(src="/js/filters.js")
+    script(src="/js/services.js")
+    script(src="/bower_components/angular-resource/angular-resource.min.js")
