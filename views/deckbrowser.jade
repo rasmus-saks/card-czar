@@ -1,6 +1,6 @@
 extends layout
 block body
-  .deckBrowser(ng-app="CardCzar" ng-cloak ng-controller="CCDeckBrowser as db")
+  .deckBrowser(ng-cloak ng-controller="CCDeckBrowser as db")
     form(role="form")
       label.radio-inline
         input(type="radio" ng-model="db.filter" ng-value="" name="optradio")
@@ -22,9 +22,3 @@ block body
           td {{card.text}}
           td {{card.isBlack}}
           td {{card.chooseNum}}
-block scripts
-  script(src="/bower_components/angular/angular.min.js")
-  script(src="/js/app.js")
-  script(src="/js/filters.js")
-  script(src="/js/services.js")
-  script(src="/bower_components/angular-resource/angular-resource.min.js")
