@@ -14,13 +14,15 @@ router.get("/", function (req, res) {
 
 router.get("/:code", function (req, res) {
   var code = req.params.code.toLowerCase();
-  models.Game.find({join_code: code})
+  models.Game.find({where: {join_code: code}})
     .then(function (game) {
-      if (!game) {
-        res.redirect("/");
-        return;
-      }
-      res.render("game", {code: code});
+      return game.getPlayers({include: [{all: true}]}).then(function (players) {
+        if (!game || game.status != 0 && !players.some(p => p.User.id == req.user.id)) {
+          res.redirect("/");
+          return;
+        }
+        res.render("game", {code: code});
+      });
     });
 });
 

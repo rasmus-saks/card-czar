@@ -8,31 +8,35 @@
     ccmain.hello = "Hello,";
     socket.on('init', function (data) {
       console.log("init");
+    });
+    socket.on('status', function (data) {
+      console.log("status");
       console.log(data);
-      ccmain.player = data.player;
-      ccmain.users = data.users;
-      ccmain.lobbycode = data.lobbycode;
-      ccmain.game = data.game;
+      if (data.player)
+        ccmain.player = data.player;
+      if (data.users)
+        ccmain.users = data.users;
+      if (data.lobbycode)
+        ccmain.lobbycode = data.lobbycode;
+      if (data.game)
+        ccmain.game = data.game;
+      if (data.cards)
+        ccmain.cards = data.cards;
+      console.log(ccmain);
     });
     socket.on('newround', function (data) {
       console.log("newround");
-      console.log(data);
-      ccmain.player = data.player;
-      ccmain.users = data.users;
-      ccmain.game = data.game;
     });
     socket.on('updateplayers', function (data) {
       console.log("updateplayers");
-      console.log(data);
-      ccmain.player = data.player;
+
     });
     socket.on('updateusers', function (data) {
       console.log("updateusers");
       console.log(data);
-      ccmain.users = data.users;
     });
-    socket.on('updatecards', function(data) {
-      ccmain.cards = data.cards;
+    socket.on('updatecards', function (data) {
+      console.log("updatecards");
     });
 
     ccmain.selectCards = function (cards) {
@@ -64,7 +68,7 @@
 
     $scope.$watch("db.filter", function (value) {
       console.log(0);
-      if (typeof value.isBlack === 'undefined' || value.isBlack === null ) {
+      if (typeof value.isBlack === 'undefined' || value.isBlack === null) {
         console.log(1);
         window.location.hash = "all";
       } else if (value.isBlack) {

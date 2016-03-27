@@ -13,7 +13,7 @@ var util = {
     if (!host) throw new Error("Missing host user");
     var str = randomString(4);
     return models.Game.find({where: {join_code: str}}).then(function (game) {
-      if (!game) return models.Game.create({join_code: str}, {include: [models.User]})
+      if (!game) return models.Game.create({join_code: str}, {include: [{all: true}]})
         .then(function (game) {
           return game.setHost(host).then(function () {
             return game;
@@ -46,27 +46,27 @@ var util = {
         });
     });
   },
-  drawCards: function (user, num) {
-    return user.getGame().then(function (game) {
+  drawCards: function (player, num) {
+    return player.getGame({include: [{all: true}]}).then(function (game) {
       return util.getRemainingCards(game)
         .then(function (cards) {
           var prom = [];
           var drawn = [];
           for (var i = 0; i < num; i++) {
             var idx = Math.floor(Math.random() * cards.length);
-            prom.push(user.addHandCard(cards[idx]));
+            prom.push(player.addHandCard(cards[idx]));
             prom.push(game.addPlayedCard(cards[idx]));
             drawn.push(cards[idx]);
             cards.splice(idx, 1);
           }
-          return Promise.all(prom).then(() => user.save()).then(() => game.save()).then(() => user.getHandCard());
+          return Promise.all(prom).then(() => player.save()).then(() => game.save()).then(() => player.getHandCards());
         });
     });
   },
-  chooseBlackCard: function(game) {
-    return util.getRemainingCards(game, true).then(function(cards) {
+  chooseBlackCard: function (game) {
+    return util.getRemainingCards(game, true).then(function (cards) {
       var card = cards[Math.floor(Math.random() * cards.length)];
-      return game.setBlackCard(card).then(() => game.addPlayedCard(card)).then(() => game.save());
+      return game.setBlackCard(card).then(() => game.addPlayedCard(card)).then(() => game.save()).then(() => models.Game.findById(game.id, {include: [{all: true}]}));
     });
   }
 };
