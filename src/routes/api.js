@@ -68,6 +68,10 @@ router.get("/cards", function (req, res) {
 router.get("/allCards", function (req, res) {
   //Raw JOIN query because we have to..
   models.sequelize.query("SELECT cards.id, isBlack, chooseNum, text, name, DeckId FROM cards JOIN decks ON cards.DeckId = decks.id", { type: models.sequelize.QueryTypes.SELECT}).then(function(cards) {
+    for (var i = 0; i < cards.length; i++) {
+      var c = cards[i];
+      c.isBlack = !!c.isBlack;//Convert to boolean...
+    }
     res.success(cards);
   }).catch(function (err) {
     res.fail(err);
