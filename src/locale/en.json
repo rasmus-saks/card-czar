@@ -1,4 +1,10 @@
 {
+  "nav": {
+    "togglenavigation":"Toggle Navigation",
+    "loggedinas":"Logged in as ",
+    "logout":"Log out",
+    "login":"Log in"
+  },
   "landing": {
     "valueprop":"The mobile-friendly Cards Against Humanity clone you never asked for",
     "lobbycode":"Lobby Code",
