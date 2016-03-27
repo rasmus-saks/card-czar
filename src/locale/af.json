@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "togglenavigation":"Skakel navigasie",
+    "loggedinas":"ingeteken as",
+    "logout":"Teken uit",
+    "login":"Teken in"
+  },
+  "landing": {
+    "valueprop":"Die selfoon-vriendelike Cards Against Humanity kloon jy nooit gevra vir",
+    "lobbycode":"Voorportaal Kode",
+    "join":"Sluit",
+    "or":"of",
+    "createlobby": "Maak jou eie voorportaal",
+    "users":"Totaal gebruikers:",
+    "games":"Totaal wedstryde gespeel:",
+    "authors":"Gemaak deur Al William Tammsaar, Rasmus Saks en Janek Timmas"
+  },
+  "game": {
+    "lobby":"Voorportaal",
+    "startgame":"Begin spel"
+  },
+  "login": {
+    "login":"Teken in met:",
+    "banklink": "Bank skakel",
+    "mobileid": "Mobile ID"
+  }
+}
