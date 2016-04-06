@@ -9,7 +9,7 @@ module.exports = function (sequelize, DataTypes) {
         Player.belongsTo(models.Game, {constraints: false});
         Player.belongsTo(models.User, {constraints: false});
         Player.belongsToMany(models.Card, {as: "HandCards", through: "HandCards"});
-        Player.belongsToMany(models.Card, {as: "PickedCards", through: "PickedCards"});
+        Player.belongsToMany(models.Card, {as: "PickedCards", through: models.PickedCard});
       }
     }
   });

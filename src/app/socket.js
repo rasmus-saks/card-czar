@@ -33,11 +33,12 @@ function Socket(options) {
                 cards: handCards
               });
               if (game.status == 2) {
-
                 util.getAllPickedCards(players).then(function (cards) {
                   socket.emit('status', {
                     cards: cards
                   });
+                }).catch(function(err) {
+                  console.error(err);
                 })
               }
               socket.broadcast.to(code).emit("status", {
@@ -98,7 +99,7 @@ function Socket(options) {
           prom = prom.then(function () {
               return models.Card.findById(c.id).then(function (card) {
                 if (!card) return;
-                return player.addPickedCard(card).then(() => player.removeHandCard(card));
+                return player.addPickedCard(card, {selected: c.selected}).then(() => player.removeHandCard(card));
               });
             }
           );
@@ -165,31 +166,32 @@ function Socket(options) {
                 var c = cards[i];
                 if (c.id == card.id) {
                   c.player.points += 1;
-                  console.log("1");
                   game.setPlayedCards([]).then(function () {
                     game.status = 1;
                     var cc = 0;
-                    console.log("2");
                     for (var j = 0; j < players.length; j++) {
                       var p = players[j];
                       if (p.status == 3) cc = j;
                       p.status = 0;
                     }
+                    var choose = game.BlackCard.chooseNum;
                     return util.chooseBlackCard(game).then(function (game) {
                       function drawCards(u) {
-                        return util.drawCard(u).then(function (cards) {
+                        return util.drawCards(u, choose).then(function (cards) {
                           io.to(u.User.socketId).emit('status', {
                             cards: cards
                           });
                         });
                       }
+
                       function sendCards(u) {
-                        return u.getHandCards().then(function(cards){
+                        return u.getHandCards().then(function (cards) {
                           io.to(u.User.socketId).emit('status', {
                             cards: cards
                           });
                         });
                       }
+
                       var proms = Promise.resolve();
                       players[(cc + 1) % players.length].status = 1; //Card czar
                       for (var i = 0; i < players.length; i++) {
@@ -200,7 +202,7 @@ function Socket(options) {
                           players: players,
                           game: game
                         });
-                        if(i != cc) {
+                        if (i != cc) {
                           proms = proms.then(drawCards(u));
                         } else {
                           proms = proms.then(sendCards(u));
@@ -222,9 +224,6 @@ function Socket(options) {
         console.error(err);
         socket.emit("error", err);
       });
-    });
-    socket.on('selectWinner', function (winner) {
-
     });
     socket.on("disconnect", function () {
       user.socketId = null;

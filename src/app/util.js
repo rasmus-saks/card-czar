@@ -73,24 +73,24 @@ var util = {
       return Promise.resolve(players.find(p => p.Game.id == game.id));
     });
   },
-  getAllInfo: function(user, code) {
+  getAllInfo: function (user, code) {
     return models.Game.find({where: {join_code: code}, include: [{all: true}]})
       .then(function (game) {
         if (!game) throw "No game found";
         return user.reload().then(function (user) {
           return user.getPlayers({include: [{all: true}]}).then(function (players) {
             if (!players || !players.some(p => p.Game.id == game.id)) {
-              if(game.Players.length == 10) throw "Too many players";
+              if (game.Players.length == 10) throw "Too many players";
               return user.createPlayer();
             }
             return Promise.resolve(players.find(p => p.Game.id == game.id));
-          }).then(function(player) {
+          }).then(function (player) {
             return Promise.resolve([user, game, player]);
           })
         })
       });
   },
-  getAllPickedCards: function(players) {
+  getAllPickedCards: function (players) {
     var prom = Promise.resolve([]);
     for (var i = 0; i < players.length; i++) {
       var pl = players[i];
@@ -99,13 +99,21 @@ var util = {
     function addCur(pl) {
       prom = prom.then(function (cur) {
         return pl.getPickedCards({include: [{all: true}]}).then(function (cards) {
-          return cur.concat(cards.map(c => {c.player = pl; return c;}));
+          return cur.concat(cards.map(c => {
+            c.player = pl;
+            return c;
+          })).sort((a, b) => {
+            var x = a.PickedCard.selected;
+            var y = b.PickedCard.selected;
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+          });
         });
       });
     }
+
     return prom;
   },
-  clearAllPickedCards: function(players) {
+  clearAllPickedCards: function (players) {
     var prom = Promise.resolve();
     for (var i = 0; i < players.length; i++) {
       var pl = players[i];
@@ -116,6 +124,7 @@ var util = {
         return pl.setPickedCards([]);
       });
     }
+
     return prom;
   }
 };

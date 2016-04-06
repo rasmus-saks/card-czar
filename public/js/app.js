@@ -24,12 +24,7 @@
         ccmain.game = data.game;
       if (data.cards)
         ccmain.cards = data.cards;
-      if (data.shownCards)
-        ccmain.shownCards = data.shownCards;
       console.log(data);
-    });
-    socket.on('newround', function (data) {
-      console.log("newround");
     });
 
     ccmain.selectCards = function () {
@@ -44,19 +39,24 @@
       if (!ccmain.canSelectCards()) return;
       if (card.selected) {
         var sel = card.selected;
-        delete card.selected;
         for (var i = 0; i < ccmain.cards.length; i++) {
           var c = ccmain.cards[i];
-          if (c.selected > sel) c.selected--;
+          if (c.selected >= sel) delete c.selected;
         }
       } else {
         if (ccmain.readyToSubmit()) {
           for (var j = 0; j < ccmain.cards.length; j++) {
             var crd = ccmain.cards[j];
-            if (crd.selected == 1) crd.selected = 0;
+            crd.selected = 0;
           }
         }
         card.selected = ccmain.firstUnusedSelection();
+        if (ccmain.player.status == 3) {
+          for (var g = 0; g < ccmain.cards.length; g++) {
+            var cr = ccmain.cards[g];
+            if (cr.PickedCard.PlayerId == card.PickedCard.PlayerId) cr.selected = card.selected;
+          }
+        }
       }
     };
     ccmain.firstUnusedSelection = function () {
