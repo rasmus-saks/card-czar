@@ -8,19 +8,31 @@ function stackTrace() {
 }
 var util = {
   randomString: randomString,
+  /**
+   * Create a game
+   * @param host
+   */
   createGame: function (host) {
     if (!host) throw new Error("Missing host user");
     var str = randomString(4);
+    //Find game with the generated join codde
     return models.Game.find({where: {join_code: str}}).then(function (game) {
+      //No game with the join code, create it
       if (!game) return models.Game.create({join_code: str}, {include: [{all: true}]})
         .then(function (game) {
           return game.setHost(host).then(function () {
             return game;
           });
         });
+      //Join code already exists, just recursively call this again. What could go wrong?
       return util.createGame(host);
     });
   },
+  /**
+   * Get all unpicked cards (either black or not)
+   * @param game
+   * @param black
+   */
   getRemainingCards: function (game, black) {
     if (!game) throw "No game";
     return game.getPlayedCards()
@@ -31,20 +43,15 @@ var util = {
           where.id = {$notIn: nin};
         return models.Card.findAll({where: where})
           .then(function (cards) {
-            console.log(cards.length);
             return cards;
           });
       });
   },
-  drawCard: function (user) {
-    return user.getGame().then(function (game) {
-      return util.getRemainingCards(game)
-        .then(function (cards) {
-          var card = cards[Math.floor(Math.random() * cards.length)];
-          return user.addHandCard(card).then(() => user.save()).then(() => game.addPlayedCard(card)).then(() => game.save()).then(() => user.getHandCards());
-        });
-    });
-  },
+  /**
+   * Draw a number of cards
+   * @param player
+   * @param num
+   */
   drawCards: function (player, num) {
     return player.getGame({include: [{all: true}]}).then(function (game) {
       return util.getRemainingCards(game)
@@ -59,32 +66,39 @@ var util = {
         });
     });
   },
+  /**
+   * Choose a random black card
+   * @param game
+   */
   chooseBlackCard: function (game) {
     return util.getRemainingCards(game, true).then(function (cards) {
       var card = cards[Math.floor(Math.random() * cards.length)];
       return game.setBlackCard(card).then(() => game.addPlayedCard(card)).then(() => game.save()).then(() => models.Game.findById(game.id, {include: [{all: true}]}));
     });
   },
-  getUserGamePlayer: function (user, game) {
-    return user.getPlayers({include: [{all: true}]}).then(function (players) {
-      if (!players || !players.some(p => p.Game.id == game.id)) {
-        return user.createPlayer();
-      }
-      return Promise.resolve(players.find(p => p.Game.id == game.id));
-    });
-  },
+  /**
+   * Gets a lot of info about the user, game and player
+   * @param user
+   * @param code
+   */
   getAllInfo: function (user, code) {
+    //Find the existing game
     return models.Game.find({where: {join_code: code}, include: [{all: true}]})
       .then(function (game) {
         if (!game) throw "No game found";
+
+        //Refresh the user
         return user.reload().then(function (user) {
           return user.getPlayers({include: [{all: true}]}).then(function (players) {
+            //The user has not joined the game
             if (!players || !players.some(p => p.Game.id == game.id)) {
               if (game.Players.length == 10) throw "Too many players";
               return user.createPlayer();
             }
+            //Found the existing player
             return Promise.resolve(players.find(p => p.Game.id == game.id));
           }).then(function (player) {
+            //Resolve with all the info we gathered
             return Promise.resolve([user, game, player]);
           })
         })

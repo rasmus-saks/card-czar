@@ -13,40 +13,47 @@ function Socket(options) {
     var user = socket.request.user;
     var thePlayer;
     var joinCode;
+
+    //Player requests to join the game
     socket.on("join", function (code) {
       code = code.toLowerCase();
       joinCode = code;
       util.getAllInfo(user, joinCode).spread(function (user, game, player) {
         thePlayer = player;
-        return player.setGame(game, {include: [{all: true}]}).then(function (player) {
-          return game.getPlayers({include: [{all: true}]}).then(function (players) {
-            return player.getHandCards().then(function (handCards) {
-              if (user.sessionId) {
-                io.to(user.sessionId).disconnect();
-              }
-              socket.join(game.join_code);
-              socket.emit('status', {
-                player: players.find(p => p.UserId == user.id),
-                lobbycode: game.join_code,
-                players: players,
-                game: game,
-                cards: handCards
-              });
-              if (game.status == 2) {
-                util.getAllPickedCards(players).then(function (cards) {
-                  socket.emit('status', {
-                    cards: cards
-                  });
-                }).catch(function(err) {
-                  console.error(err);
-                })
-              }
-              socket.broadcast.to(code).emit("status", {
-                players: players
-              });
-              user.socketId = socket.id;
-              return user.save();
+        //Join the player into the game
+        return game.getPlayers({include: [{all: true}]}).then(function (players) {
+          return player.getHandCards().then(function (handCards) {
+            //User has an active websocket connection, disconnect it.
+            if (user.sessionId) {
+              io.to(user.sessionId).disconnect();
+            }
+
+            //Join the game room
+            socket.join(game.join_code);
+            socket.emit('status', {
+              player: players.find(p => p.UserId == user.id),
+              lobbycode: game.join_code,
+              players: players,
+              game: game,
+              cards: handCards
             });
+            //Game is in Card Czar picking the winner phase
+            if (game.status == 2) {
+              //Send the cards we are picking from instead
+              util.getAllPickedCards(players).then(function (cards) {
+                socket.emit('status', {
+                  cards: cards
+                });
+              }).catch(function (err) {
+                console.error(err);
+              })
+            }
+            //Update players for everyone
+            socket.broadcast.to(code).emit("status", {
+              players: players
+            });
+            user.socketId = socket.id;
+            return user.save();
           });
         });
       }).catch(function (err) {

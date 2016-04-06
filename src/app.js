@@ -29,7 +29,7 @@ sequelize.authenticate().then(function () {
     models.Deck.create({
       name: "Base Game"
     }).then(function (deck) {
-      //These are provided by CaH themselves
+      //These are provided by CAH themselves
       var white = fs.readFileSync("./src/config/wcards.txt", "utf8").split("<>");
       var black = fs.readFileSync("./src/config/bcards.txt", "utf8").split("<>");
       for (var i = 0; i < white.length; i++) {
