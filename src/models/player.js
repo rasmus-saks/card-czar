@@ -1,7 +1,8 @@
 'use strict';
 module.exports = function (sequelize, DataTypes) {
   var Player = sequelize.define('Player', {
-    status: {type: DataTypes.INTEGER, defaultValue: 0}
+    status: {type: DataTypes.INTEGER, defaultValue: 0},
+    points: {type: DataTypes.INTEGER, defaultValue: 0}
   }, {
     classMethods: {
       associate: function (models) {

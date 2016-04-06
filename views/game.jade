@@ -7,15 +7,21 @@ block body
       h1 #{lang.game.lobby}
       h1
       .users
-        .user(ng-repeat="user in ccmain.users") {{user.name}}
-      .btn.btn-primary.btn-lg.btn-block(ng-show="ccmain.player.id==ccmain.game.HostId" ng-click="ccmain.startgame()") #{lang.game.startgame}
-    .game(ng-show = "ccmain.game.status===1")
+        .user(ng-repeat="player in ccmain.players") {{player.User.name}} {{ccmain.player.User.id == player.User.id ? " <- That's you!" : ""}}
+      .btn.btn-primary.btn-lg.btn-block(ng-show="ccmain.player.User.id==ccmain.game.HostId" ng-click="ccmain.startgame()") #{lang.game.startgame}
+    .game(ng-show = "ccmain.game.status!==0")
+      .users
+        .user(ng-repeat="player in ccmain.players") {{player.points}} - {{player.User.name}} ({{ccmain.getStatusText(player)}}) {{ccmain.player.User.id == player.User.id ? " <- That's you!" : ""}}
+      hr
       .black-card
-        |{{ccmain.game.BlackCard.text}}
+        | {{ccmain.blackCardText()}}
       .instruction
+      hr
       .white-cards
-        .white-card(ng-repeat="card in ccmain.cards")
-          |{{card.text}}
+        a.btn.btn-block.white.white-card(ng-repeat="card in ccmain.cards" data-id="{{card.id}}" ng-click="ccmain.selectCard(card)" ng-disabled="!ccmain.canSelectCards()")
+          | {{card.selected ? card.selected : ''}} {{card.text}}
+        a.btn.btn-block(ng-show="ccmain.readyToSubmit()" ng-click="ccmain.selectCards()")
+          | Confirm selection
 
 prepend scripts
   script.

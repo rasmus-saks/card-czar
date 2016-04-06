@@ -11,144 +11,215 @@ function Socket(options) {
   }));
   io.on('connection', function (socket) {
     var user = socket.request.user;
+    var thePlayer;
     var joinCode;
     socket.on("join", function (code) {
       code = code.toLowerCase();
       joinCode = code;
-      models.Game.find({where: {join_code: code}, include: [{all: true}]})
-        .then(function (game) {
-          if (!game) throw "No game found";
-          user.reload().then(function (user) {
-            user.getPlayers({include: [{all: true}]}).then(function (players) {
-              if (!players || !players.some(p => p.Game.id == game.id)) {
-                return user.createPlayer();
+      util.getAllInfo(user, joinCode).spread(function (user, game, player) {
+        thePlayer = player;
+        return player.setGame(game, {include: [{all: true}]}).then(function (player) {
+          return game.getPlayers({include: [{all: true}]}).then(function (players) {
+            return player.getHandCards().then(function (handCards) {
+              if (user.sessionId) {
+                io.to(user.sessionId).disconnect();
               }
-              return Promise.resolve(players.find(p => p.Game.id == game.id));
-            }).then(function (player) {
-              return player.setGame(game, {include: [{all: true}]}).then(function (player) {
-                return game.getPlayers({include: [{all: true}]}).then(function (players) {
-                  return player.getHandCards().then(function (handCards) {
-                    players = players.map(p => p.User);
-                    if (user.sessionId) {
-                      io.to(user.sessionId).disconnect();
-                    }
-                    socket.join(game.join_code);
-                    socket.emit('status', {
-                      player: user,
-                      lobbycode: game.join_code,
-                      users: players,
-                      game: game,
-                      cards: handCards
-                    });
-                    socket.broadcast.to(code).emit("status", {
-                      users: players
-                    });
-                    user.socketId = socket.id;
-                    return user.save();
-                  });
-                });
+              socket.join(game.join_code);
+              socket.emit('status', {
+                player: players.find(p => p.UserId == user.id),
+                lobbycode: game.join_code,
+                players: players,
+                game: game,
+                cards: handCards
               });
+              if (game.status == 2) {
+
+                util.getAllPickedCards(players).then(function (cards) {
+                  socket.emit('status', {
+                    cards: cards
+                  });
+                })
+              }
+              socket.broadcast.to(code).emit("status", {
+                players: players
+              });
+              user.socketId = socket.id;
+              return user.save();
             });
           });
-        }).catch(function (err) {
+        });
+      }).catch(function (err) {
+        console.error(err);
         socket.emit("error", err);
       });
     });
     socket.on("startGame", function () {
-      models.Game.find({where: {join_code: joinCode}})
-        .then(function (game) {
-          if (game.status !== 0) {
-            throw "Game has already started";
-          }
-          game.getPlayers({include: [{all: true}]}).then(function (players) {
-            players[0].status = 1; //Card czar
-            game.status = 1;
-            util.chooseBlackCard(game).then(function (game) {
-              function drawCards(u) {
-                return util.drawCards(u, 10).then(function (cards) {
-                  io.to(u.User.socketId).emit('status', {
-                    cards: cards
-                  });
-                });
-              }
-              var proms = Promise.resolve();
-              for (var i = 0; i < players.length; i++) {
-                let u = players[i];
-                if (i !== 0) u.status = 0; //Picking
+      util.getAllInfo(user, joinCode).spread(function (user, game, player) {
+        if (game.status !== 0) {
+          throw "Game has already started";
+        }
+        game.getPlayers({include: [{all: true}]}).then(function (players) {
+          players[0].status = 1; //Card czar
+          game.status = 1;
+          return util.chooseBlackCard(game).then(function (game) {
+            function drawCards(u) {
+              return util.drawCards(u, 10).then(function (cards) {
                 io.to(u.User.socketId).emit('status', {
-                  player: u,
-                  users: players.map(p => p.User),
-                  game: game
+                  cards: cards
                 });
-                proms.then(drawCards(u));
-              }
-              return proms;
-            }).then(function() {
-              players.map(u => u.save());
-              game.save();
-            });
+              });
+            }
+
+            var proms = Promise.resolve();
+            for (var i = 0; i < players.length; i++) {
+              let u = players[i];
+              if (i !== 0) u.status = 0; //Picking
+              io.to(u.User.socketId).emit('status', {
+                player: u,
+                players: players,
+                game: game
+              });
+              proms = proms.then(drawCards(u));
+            }
+            return proms;
+          }).then(function () {
+            players.map(u => u.save());
+            game.save();
           });
-        }).catch(function (err) {
+        });
+      }).catch(function (err) {
+        console.error(err);
         socket.emit("error", err);
       });
     });
     socket.on("pickCards", function (cards) {
-      user.reload().then(function (user) {
-        models.Game.findOne({where: {join_code: joinCode}}).then(function (game) {
-          var prom = [];
+      util.getAllInfo(user, joinCode).spread(function (user, game, player) {
+        function addCard(c) {
+          prom = prom.then(function () {
+              return models.Card.findById(c.id).then(function (card) {
+                if (!card) return;
+                return player.addPickedCard(card).then(() => player.removeHandCard(card));
+              });
+            }
+          );
+        }
 
-          function addCard(c) {
-            prom.push(models.Card.findOne({where: {id: c.id}}).then(function (card) {
-              if (!card) return;
-              user.addPickedCard(card);
-              user.removeHandCard(card);
-            }));
-          }
+        if (player.status == 0) { //Regular player picked their cards
+          var prom = Promise.resolve();
 
           for (var i = 0; i < cards.length; i++) {
             let c = cards[i];
-            addCard(user, c);
+            addCard(c);
           }
-          Promise.all(prom)
-            .then(user.getHandCards())
-            .then(function (cards) {
-              user.status = 2; //Waiting
-              socket.emit('status', {
-                cards: cards
-              });
-
-              return user.save();
-            })
-            .then(function () {
-              return game.getUsers().then(function (users) {
-                for (var i = 0; i < users.length; i++) {
-                  let u = users[i];
-                  if (u.status != 1 && u.status !== 0) return; //Still have players picking
-                }
-                function emitPicks() {
-                  io.to(joinCode).emit('status', {
-                    users: users
-                  });
-                  game.getPickedCards().then(function (picked) {
+          prom.then(function () {
+            player.getHandCards()
+              .then(function (cards) {
+                player.status = 2; //Waiting
+                socket.emit('status', {
+                  cards: cards,
+                  player: player
+                });
+                game.status = 2;
+                game.save();
+                return player.save();
+              })
+              .then(function () {
+                return game.getPlayers({include: [{all: true}]}).then(function (players) {
+                  for (var i = 0; i < players.length; i++) {
+                    let u = players[i];
+                    if (u.status === 0) return; //Still have players picking
+                  }
+                  function emitPicks() {
                     io.to(joinCode).emit('status', {
-                      shownCards: picked
+                      players: players,
+                      game: game
+                    });
+                    util.getAllPickedCards(players).then(function (picked) {
+                      io.to(joinCode).emit('status', {
+                        cards: picked
+                      });
+                    });
+                  }
+
+                  //Time for the czar to pick
+                  for (var j = 0; j < players.length; j++) {
+                    let u = players[j];
+                    if (u.status == 1) {
+                      u.status = 3; //Card czar picking
+                      u.save();
+                      io.to(u.User.socketId).emit('status', {
+                        player: u
+                      });
+                      emitPicks();
+                      break;
+                    }
+                  }
+                });
+              });
+          });
+        } else if (player.status == 3) { //Card Czar picked a winner
+          return game.getPlayers({include: [{all: true}]}).then(function (players) {
+            var card = cards[0];
+            util.getAllPickedCards(players).then(function (cards) {
+              for (var i = 0; i < cards.length; i++) {
+                var c = cards[i];
+                if (c.id == card.id) {
+                  c.player.points += 1;
+                  console.log("1");
+                  game.setPlayedCards([]).then(function () {
+                    game.status = 1;
+                    var cc = 0;
+                    console.log("2");
+                    for (var j = 0; j < players.length; j++) {
+                      var p = players[j];
+                      if (p.status == 3) cc = j;
+                      p.status = 0;
+                    }
+                    return util.chooseBlackCard(game).then(function (game) {
+                      function drawCards(u) {
+                        return util.drawCard(u).then(function (cards) {
+                          io.to(u.User.socketId).emit('status', {
+                            cards: cards
+                          });
+                        });
+                      }
+                      function sendCards(u) {
+                        return u.getHandCards().then(function(cards){
+                          io.to(u.User.socketId).emit('status', {
+                            cards: cards
+                          });
+                        });
+                      }
+                      var proms = Promise.resolve();
+                      players[(cc + 1) % players.length].status = 1; //Card czar
+                      for (var i = 0; i < players.length; i++) {
+                        let u = players[i];
+                        if (i !== (cc + 1) % players.length) u.status = 0; //Picking
+                        io.to(u.User.socketId).emit('status', {
+                          player: u,
+                          players: players,
+                          game: game
+                        });
+                        if(i != cc) {
+                          proms = proms.then(drawCards(u));
+                        } else {
+                          proms = proms.then(sendCards(u));
+                        }
+                      }
+                      return proms;
+                    }).then(function () {
+                      players.map(u => u.save());
+                      util.clearAllPickedCards(players);
+                      game.save();
                     });
                   });
                 }
-                //Time for the czar to pick
-                for (var j = 0; j < users.length; j++) {
-                  let u = users[j];
-                  if (u.status == 1) {
-                    u.status = 3; //Card czar picking
-                    u.save();
-                    emitPicks();
-                    break;
-                  }
-                }
-              });
+              }
             });
-        });
+          });
+        }
       }).catch(function (err) {
+        console.error(err);
         socket.emit("error", err);
       });
     });
