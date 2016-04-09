@@ -113,6 +113,21 @@ if (!window.jQuery) {
       }
     };
 
+    ccmain.getInstructions = function(){
+      switch (ccmain.player.status) {
+        case 0:
+          return "Pick card(s)";
+        case 1:
+          return "You are Card Czar. Please wait.";
+        case 2:
+          return "Please wait";
+        case 3:
+          return "Pick the winner!";
+        default:
+          return "Unknown status " + ccmain.player.status;
+      }
+    };
+
     ccmain.canSelectCards = function () {
       return [0, 3].indexOf(ccmain.player.status) !== -1;
     };

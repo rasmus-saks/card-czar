@@ -9,14 +9,12 @@ block body
       .users
         .user(ng-repeat="player in ccmain.players") {{player.User.name}} {{ccmain.player.User.id == player.User.id ? " <- That's you!" : ""}}
       .btn.btn-primary.btn-lg.btn-block(ng-show="ccmain.player.User.id==ccmain.game.HostId" ng-click="ccmain.startgame()") #{lang.game.startgame}
-    .game(ng-show = "ccmain.game.status!==0")
+    .game-ongoing(ng-show = "ccmain.game.status!==0")
       .users
         .user(ng-repeat="player in ccmain.players") {{player.points}} - {{player.User.name}} ({{ccmain.getStatusText(player)}}) {{ccmain.player.User.id == player.User.id ? " <- That's you!" : ""}}
-      hr
       .black-card
         | {{ccmain.blackCardText()}}
-      .instruction
-      hr
+      .instruction {{ccmain.getInstructions()}}
       .white-cards
         a.btn.btn-block.white.white-card(ng-repeat="card in ccmain.cards" data-id="{{card.id}}" ng-click="ccmain.selectCard(card)" ng-disabled="!ccmain.canSelectCards()")
           | {{card.selected ? card.selected : ''}} {{card.text}}
