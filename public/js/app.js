@@ -1,4 +1,9 @@
 /*global angular lobbycode*/
+
+if (!window.jQuery) {
+  document.write('<script src="/bower_components/jquery/dist/jquery.min.js"></script>');
+}
+
 (function () {
   var app = angular.module('CardCzar', ['CardCzar.filters', 'CardCzar.services']);
   app.controller("CCGame", function AppCtrl($scope, $http, socket) {
