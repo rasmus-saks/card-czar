@@ -2,29 +2,7 @@
    Created by AlWilliam on 3/5/2016.
 extends layout
 block body
-  .navbar
-    .container
-      .col-lg-12
-        .navbar-header
-          button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false")
-            span.sr-only #{lang.nav.togglenavigation}
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.navbar-brand(href="/") Card Czar
-        .collapse.navbar-collapse#navbar-collapse
-          ul.nav.navbar-nav.navbar-right(ng-cloak ng-show="main.loaded")
-            li.flag
-              p.navbar-text
-                a#lang(href="/?lang=" + nextLang) #{nextLang.toUpperCase()}
-            li
-              p.navbar-text(ng-show="main.user.id") #{lang.nav.loggedinas}
-                span#user {{main.user.name}}
-            li
-              a.btn.navbar-btn.invert(ng-show="main.user.id" href="/auth/logout") #{lang.nav.logout}
-            li
-              a.btn.navbar-btn.invert(ng-hide="main.user.id" href="/auth") #{lang.nav.login}
-
+  include navbar
   .intro
     .container
       .col-lg-8.col-lg-offset-2
