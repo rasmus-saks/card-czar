@@ -2,6 +2,8 @@
 var socket_io = require('socket.io');
 var passportSocketIo = require("passport.socketio");
 var models = require("../models");
+var Promise = models.Sequelize.Promise;
+
 var util = require("../app/util");
 function Socket(options) {
   var io = socket_io(options.server);
@@ -11,7 +13,6 @@ function Socket(options) {
   }));
   io.on('connection', function (socket) {
     var user = socket.request.user;
-    var thePlayer;
     var joinCode;
 
     //Player requests to join the game
@@ -19,7 +20,6 @@ function Socket(options) {
       code = code.toLowerCase();
       joinCode = code;
       util.getAllInfo(user, joinCode).spread(function (user, game, player) {
-        thePlayer = player;
         //Join the player into the game
         return game.getPlayers({include: [{all: true}]}).then(function (players) {
           return player.getHandCards().then(function (handCards) {
@@ -62,7 +62,7 @@ function Socket(options) {
       });
     });
     socket.on("startGame", function () {
-      util.getAllInfo(user, joinCode).spread(function (user, game, player) {
+      util.getAllInfo(user, joinCode).spread(function (user, game) {
         if (game.status !== 0) {
           throw "Game has already started";
         }

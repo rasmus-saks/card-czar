@@ -1,6 +1,4 @@
-/**
- * Created by AlWilliam on 3/5/2016.
- */
+/*global angular*/
 angular.module('CardCzar.filters', []).
   filter('interpolate', ['version', function(version) {
     return function(text) {

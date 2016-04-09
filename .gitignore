@@ -90,3 +90,6 @@ src/migrations/*
 .ebextensions/*
 public/*.css
 .ebignore
+beanstalk-config.js
+dist
+dist.zip

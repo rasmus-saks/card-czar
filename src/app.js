@@ -9,7 +9,7 @@ var compression = require('compression');
 var stylus = require('stylus');
 var nib = require('nib');
 var models = require('./models');
-global.env = process.env.NODE_ENV || 'development';
+var env = global.env = process.env.NODE_ENV || 'development';
 var config = require('./config/config.json')[env];
 var sequelize = models.sequelize;
 var passport = require('passport');
@@ -114,7 +114,7 @@ app.use(function (req, res, next) {
       next();
       return;
     } catch (ignored) {
-
+      //eslint-disable no-empty
     }
   }
   res.locals.lang = require("./locale/en.json");

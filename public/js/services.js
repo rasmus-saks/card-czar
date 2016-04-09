@@ -1,3 +1,4 @@
+/*global angular io*/
 angular.module('CardCzar.services', ['ngResource']).value('version', '0.1')
   .factory('socket', function ($rootScope) {
     var socket = io.connect();

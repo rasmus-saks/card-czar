@@ -1,0 +1,15 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "env": {
+    "node": true
+  },
+  "globals": {
+    "io": true,
+    "env": true
+  },
+  "rules": {
+    "no-console": 0
+  }
+}

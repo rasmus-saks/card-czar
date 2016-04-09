@@ -1,3 +1,4 @@
+/*global angular lobbycode*/
 (function () {
   var app = angular.module('CardCzar', ['CardCzar.filters', 'CardCzar.services']);
   app.controller("CCGame", function AppCtrl($scope, $http, socket) {
@@ -9,11 +10,9 @@
     ccmain.players = [];
     ccmain.player = {};
     ccmain.game = {};
-    socket.on('init', function (data) {
-      console.log("init");
+    socket.on('init', function () {
     });
     socket.on('status', function (data) {
-      console.log("status");
       if (data.player)
         ccmain.player = data.player;
       if (data.players)
@@ -24,7 +23,6 @@
         ccmain.game = data.game;
       if (data.cards)
         ccmain.cards = data.cards;
-      console.log(data);
     });
 
     ccmain.selectCards = function () {
@@ -117,7 +115,7 @@
   app.controller("CCDeckBrowser", function ($scope, $http, AllCards) {
     this.cards = AllCards.query();
 
-    hash = document.URL.substr(document.URL.indexOf('#') + 1);
+    var hash = document.URL.substr(document.URL.indexOf('#') + 1);
     if (hash === "black") {
       this.filter = true;
     } else if (hash === "white") {

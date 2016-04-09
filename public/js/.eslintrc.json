@@ -1,0 +1,12 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 5
+  },
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "io": true,
+    "angular": true
+  }
+}
