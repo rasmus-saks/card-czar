@@ -85,12 +85,12 @@ build/Release
 node_modules
 
 src/app/config.js
-src/config/config.json
-src/migrations/*
+/src/config/config.json
+/src/migrations/*
 .ebextensions/*
 public/*.css
 .ebignore
 beanstalk-config.js
-dist
+/dist
 dist.zip
-cert
+/cert
