@@ -127,6 +127,7 @@ app.use("/game", require("./routes/game"));
 app.use("/auth", require("./routes/auth"));
 app.use("/api", require("./routes/api"));
 app.use("/deckbrowser", require("./routes/deckbrowser"));
+app.use("/bank", require("./routes/bank"));
 app.use("/", require("./routes/index"));
 
 
@@ -136,6 +137,7 @@ global.io = require("./app/socket")({
   session: sessionMiddleware,
   store: store
 });
+
 
 try {
   var privateKey = fs.readFileSync('cert/server.key', 'utf8');

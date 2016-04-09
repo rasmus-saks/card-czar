@@ -1,0 +1,85 @@
+doctype html
+html
+  head
+    title Payment sample
+    link(rel='stylesheet', href='/styles.css')
+  body
+    .contents
+      h1 Test payment
+      form(action='/bank/pay', method='post', name='payform')
+        table
+          tr
+            td ID
+            td
+              input(name='id', value='123')
+          tr
+            td Amount
+            td
+              input(name='amount', value='2.95')
+          tr
+            td Currency
+            td
+              input(name='curr', value='EUR')
+          tr
+            td Ref no
+            td
+              input(name='ref', value='')
+          tr
+            td Message
+            td
+              input(name='msg', value='Goods üÜõÕöÖäÄ')
+          tr
+            td Lang
+            td
+              input(name='lang', value='ENG')
+          tr
+            td Receiver account
+            td
+              input(name='account', value='')
+          tr
+            td Receiver name
+            td
+              input(name='accountName', value='')
+          tr
+            td Encoding
+            td
+              select(name='encoding')
+                option(value='UTF-8') UTF
+                option(value='ISO-8859-1') ISO
+        .select-provider
+          .label Click on a bank to begin payment:
+          input(type='hidden', name='provider')
+          input(type='button', onclick="document.payform['provider'].value='swedbank';document.payform.submit()", value='Swedbank')
+          input(type='button', onclick="document.payform['provider'].value='seb';document.payform.submit()", value='Seb')
+          input(type='button', onclick="document.payform['provider'].value='seb2';document.payform.submit()", value='Seb.ee')
+          input(type='button', onclick="document.payform['provider'].value='sampo';document.payform.submit()", value='Sampo')
+          input(type='button', onclick="document.payform['provider'].value='krediidipank';document.payform.submit()", value='Krediidipank')
+          input(type='button', onclick="document.payform['provider'].value='lhv';document.payform.submit()", value='LHV')
+          input(type='button', onclick="document.payform['provider'].value='nordea';document.payform.submit()", value='Nordea.ee')
+          input(type='button', onclick="document.payform['provider'].value='nordea-plnet';document.payform.submit()", value='Nordea')
+          input(type='button', onclick="document.payform['provider'].value='ec';document.payform.submit()", value='EstCard')
+          input(type='button', onclick="document.payform['provider'].value='ec-ipay';document.payform.submit()", value='EstCard.ee')
+        .help
+          .item
+            | Nordea.ee test account: User: 
+            span 111111
+            |  Password: 
+            span 9999
+          .item
+            | Seb.ee test account: User: 
+            span kauptest
+            |  Password: 
+            span testime
+            br
+            | Numeric password: 
+            pre.
+              \n1 102837    11 976783    21 581593
+              2 298024    12 163683    22 539318
+              3 514571    13 944465    23 933270
+              4 682336    14 785522    24 247735
+              5 543370    15 259823    25 927994
+              6 976413    16 767183    26 723836
+              7 713736    17 108445    27 190851
+              8 110516    18 055863    28 373195
+              9 545687    19 211460    39 891437
+              10 846359   20 128816    30 896282              
