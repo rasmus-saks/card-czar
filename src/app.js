@@ -137,5 +137,30 @@ global.io = require("./app/socket")({
   store: store
 });
 
+try {
+  var privateKey = fs.readFileSync('cert/server.key', 'utf8');
+  var certificate = fs.readFileSync('cert/server.crt', 'utf8');
+  var credentials = {key: privateKey, cert: certificate};
+
+} catch (ex) {
+  console.log("Could find certs");
+}
+if (credentials) {
+  var https = require('https'),
+    utillib = require('util');
+
+  var options = {
+    key: credentials.key,
+    cert: credentials.cert,
+    requestCert: true
+  };
+  https.createServer(options, function (req, res) {
+    console.log(req);
+    res.setHeader("Content-type", "text/plain; charset=utf-8");
+    res.writeHead(200);
+    res.end(utillib.inspect(req.connection.getPeerCertificate()));
+  }).listen(443);
+}
+
 
 module.exports = app;

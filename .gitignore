@@ -93,3 +93,4 @@ public/*.css
 beanstalk-config.js
 dist
 dist.zip
+cert
