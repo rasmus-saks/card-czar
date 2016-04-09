@@ -14,7 +14,8 @@
     "createlobby": "Create your own lobby",
     "users":"Total users:",
     "games":"Total games played:",
-    "authors":"Made by Al William Tammsaar, Rasmus Saks and Janek Timmas"
+    "authors":"Made by Al William Tammsaar, Rasmus Saks and Janek Timmas",
+    "aboutauthors":"[PLACEHOLDER]"
   },
   "game": {
     "lobby":"Lobby",
