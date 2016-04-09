@@ -68,11 +68,12 @@ gulp.task('src', ["lint"], function () {
 
 gulp.task('node-install', function () {
   return gulp.src('./package.json')
+    .pipe(gulp.dest("./dist"))
     .pipe(install({production: true}));
 });
 
 gulp.task('zip', function () {
-  return gulp.src(["./dist/**/*", "!dist/package.json"])
+  return gulp.src(["./dist/**/*"])
     .pipe(zip('dist.zip'))
     .pipe(gulp.dest('./'));
 });
