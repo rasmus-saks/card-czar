@@ -66,28 +66,35 @@ gulp.task('src', ["lint"], function () {
   return merge(src, config);
 });
 
-gulp.task('node-install', function() {
+gulp.task('node-install', function () {
   return gulp.src('./package.json')
-    .pipe(gulp.dest('dist/'))
+    .pipe(gulp.dest("./dist"))
     .pipe(install({production: true}));
 });
 
-gulp.task('zip', function() {
-  return gulp.src(["./dist/**/*", "!dist/package.json"])
+gulp.task('zip', function () {
+  return gulp.src(["./dist/**/*"])
     .pipe(zip('dist.zip'))
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('deploy', ['default'], function() {
-  awsBeanstalk.deploy('./dist.zip', require("./beanstalk-config.js"), function(err) {
-    console.log(err);
-  });
+gulp.task('extras', function () {
+  return merge(
+    gulp.src(["bower.json", "package.json"])
+      .pipe(gulp.dest("./dist")),
+    gulp.src(["cert/*"])
+      .pipe(gulp.dest("./dist/cert")),
+    gulp.src(["bower_components/*"])
+      .pipe(gulp.dest("./dist/bower_components")),
+    gulp.src(["views/*"])
+      .pipe(gulp.dest("./dist/views"))
+  );
 });
 
 gulp.task('default', function () {
   return runSequence(
     ['clean'],
-    ['js', 'static', 'css', 'src'],
+    ['js', 'static', 'css', 'src', 'extras'],
     ['node-install'],
     ['zip']
   );

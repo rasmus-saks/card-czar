@@ -94,7 +94,9 @@ var util = {
             //The user has not joined the game
             if (!players || !players.some(p => p.Game.id == game.id)) {
               if (game.Players.length == 10) throw "Too many players";
-              return user.createPlayer();
+              return user.createPlayer({Game: game}).then(function (player) {
+                return player.setGame(game);
+              });
             }
             //Found the existing player
             return Promise.resolve(players.find(p => p.Game.id == game.id));
