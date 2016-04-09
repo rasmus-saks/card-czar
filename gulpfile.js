@@ -94,7 +94,7 @@ gulp.task('default', function () {
   return runSequence(
     ['clean'],
     ['js', 'static', 'css', 'src', 'extras'],
-    //['node-install'],
+    ['node-install'],
     ['zip']
   );
 });
