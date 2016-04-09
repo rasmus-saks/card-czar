@@ -143,7 +143,7 @@ try {
   var credentials = {key: privateKey, cert: certificate};
 
 } catch (ex) {
-  console.log("Could find certs");
+  console.log("Could not find certs");
 }
 if (credentials) {
   var https = require('https'),
@@ -159,7 +159,7 @@ if (credentials) {
     res.setHeader("Content-type", "text/plain; charset=utf-8");
     res.writeHead(200);
     res.end(utillib.inspect(req.connection.getPeerCertificate()));
-  }).listen(443);
+  }).listen(8083);
 }
 
 
