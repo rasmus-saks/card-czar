@@ -2,23 +2,23 @@
    Created by AlWilliam on 3/5/2016.
 extends layout
 block body
-  .game.col-lg-6.col-lg-offset-3(ng-controller="CCGame as ccmain")
-    .lobby(ng-hide = "ccmain.game.status!==0")
+  .game.col-lg-6.col-lg-offset-3(data-ng-controller="CCGame as ccmain")
+    .lobby(data-ng-hide = "ccmain.game.status!==0")
       h1 #{lang.game.lobby}
       h1
       .users
-        .user(ng-repeat="player in ccmain.players") {{player.User.name}} {{ccmain.player.User.id == player.User.id ? " <- That's you!" : ""}}
-      .btn.btn-primary.btn-lg.btn-block(ng-show="ccmain.player.User.id==ccmain.game.HostId" ng-click="ccmain.startgame()") #{lang.game.startgame}
-    .game-ongoing(ng-show = "ccmain.game.status!==0")
+        .user(data-ng-repeat="player in ccmain.players") {{player.User.name}} {{ccmain.player.User.id == player.User.id ? " <- That's you!" : ""}}
+      .btn.btn-primary.btn-lg.btn-block(data-ng-show="ccmain.player.User.id==ccmain.game.HostId" data-ng-click="ccmain.startgame()") #{lang.game.startgame}
+    .game-ongoing(data-ng-show = "ccmain.game.status!==0")
       .users
-        .user(ng-repeat="player in ccmain.players") {{player.points}} - {{player.User.name}} ({{ccmain.getStatusText(player)}}) {{ccmain.player.User.id == player.User.id ? " <- That's you!" : ""}}
+        .user(data-ng-repeat="player in ccmain.players") {{player.points}} - {{player.User.name}} ({{ccmain.getStatusText(player)}}) {{ccmain.player.User.id == player.User.id ? " <- That's you!" : ""}}
       .black-card
         | {{ccmain.blackCardText()}}
       .instruction {{ccmain.getInstructions()}}
       .white-cards
-        a.btn.btn-block.white.white-card(ng-repeat="card in ccmain.cards" data-id="{{card.id}}" ng-click="ccmain.selectCard(card)" ng-disabled="!ccmain.canSelectCards()")
+        a.btn.btn-block.white.white-card(data-ng-repeat="card in ccmain.cards" data-id="{{card.id}}" data-ng-click="ccmain.selectCard(card)" data-ng-disabled="!ccmain.canSelectCards()")
           | {{card.selected ? card.selected : ''}} {{card.text}}
-        a.btn.btn-block(ng-show="ccmain.readyToSubmit()" ng-click="ccmain.selectCards()")
+        a.btn.btn-block(data-ng-show="ccmain.readyToSubmit()" data-ng-click="ccmain.selectCards()")
           | Confirm selection
 
 prepend scripts

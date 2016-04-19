@@ -9,14 +9,14 @@
           span.icon-bar
         a.navbar-brand(href="/") Card Czar
       .collapse.navbar-collapse#navbar-collapse
-        ul.nav.navbar-nav.navbar-right(ng-cloak ng-show="main.loaded")
+        ul.nav.navbar-nav.navbar-right(data-ng-cloak data-ng-show="main.loaded")
           li.flag
             p.navbar-text
               a#lang(href="/?lang=" + nextLang) #{nextLang.toUpperCase()}
           li
-            p.navbar-text(ng-show="main.user.id") #{lang.nav.loggedinas}
+            p.navbar-text(data-ng-show="main.user.id") #{lang.nav.loggedinas}
               span#user {{main.user.name}}
           li
-            a.btn.navbar-btn.invert(ng-show="main.user.id" href="/auth/logout") #{lang.nav.logout}
+            a.btn.navbar-btn.invert(data-ng-show="main.user.id" href="/auth/logout") #{lang.nav.logout}
           li
-            a.btn.navbar-btn.invert(ng-hide="main.user.id" href="/auth") #{lang.nav.login}
+            a.btn.navbar-btn.invert(data-ng-hide="main.user.id" href="/auth") #{lang.nav.login}

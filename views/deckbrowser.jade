@@ -1,15 +1,15 @@
 extends layout
 block body
-  .deckBrowser(ng-cloak ng-controller="CCDeckBrowser as db")
+  .deckBrowser(data-ng-cloak data-ng-controller="CCDeckBrowser as db")
     form(role="form")
       label.radio-inline
-        input(type="radio" ng-model="db.filter" ng-value="" name="optradio")
+        input(type="radio" data-ng-model="db.filter" data-ng-value="" name="optradio")
         | All
       label.radio-inline
-        input(type="radio" ng-model="db.filter" ng-value="true" name="optradio")
+        input(type="radio" data-ng-model="db.filter" data-ng-value="true" name="optradio")
         | Black
       label.radio-inline
-        input(type="radio" ng-model="db.filter" ng-value="false" name="optradio")
+        input(type="radio" data-ng-model="db.filter" data-ng-value="false" name="optradio")
         | White
     .deck
       table.table.table-condensed.table-striped.table-hover
@@ -18,7 +18,7 @@ block body
           th Text
           th Black?
           th Choose number
-        tr(ng-repeat="card in db.cards | filter: {isBlack:db.filter}")
+        tr(data-ng-repeat="card in db.cards | filter: {isBlack:db.filter}")
           td {{card.name}}
           td {{card.text}}
           td {{card.isBlack}}
