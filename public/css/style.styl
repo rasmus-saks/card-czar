@@ -22,7 +22,7 @@ body
   background-color cc-white
   color cc-black
   margin-bottom 60px
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
+[data-ng-cloak], .ng-cloak, .x-ng-cloak
   display none !important;
 
 .navbar
@@ -142,8 +142,8 @@ mobile-fix()
       .icon-bar
         background-color cc-white
 
-@media screen and (-webkit-device-pixel-ratio: 2) and (max-device-width: 360px)
+@media screen and (max-device-width: 360px)
   mobile-fix()
 
-@media screen  and (device-width: 360px)  and (device-height: 640px)  and (-webkit-device-pixel-ratio: 3)
+@media screen and (device-width: 360px) and (device-height: 640px)
   mobile-fix()
