@@ -21,6 +21,7 @@
     "gulp-zip": "^3.2.0",
     "merge-stream": "^1.0.0",
     "nib": "^1.1.0",
+    "nightwatch": "^0.8.18",
     "node-aws-beanstalk": "^3.4.2",
     "run-sequence": "^1.1.5"
   },

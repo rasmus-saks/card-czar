@@ -94,3 +94,4 @@ beanstalk-config.js
 /dist
 dist.zip
 /cert
+/test/reports/*
