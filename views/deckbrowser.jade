@@ -1,7 +1,7 @@
 extends layout
 block body
   .deckBrowser(data-ng-cloak data-ng-controller="CCDeckBrowser as db")
-    form(role="form")
+    form
       label.radio-inline
         input(type="radio" data-ng-model="db.filter" data-ng-value="" name="optradio")
         | All
