@@ -82,8 +82,29 @@ app.use(stylus.middleware({
       .use(nib());
   }
 }));
-app.use(express.static(path.join(__dirname, '../public')));
-app.use("/bower_components", express.static(path.join(__dirname, '../bower_components')));
+
+app.use("/js/combined.js", function(req, res) {
+  var files=["bower_components/bootstrap/dist/js/bootstrap.min.js",
+    "bower_components/angular/angular.min.js",
+    "public/js/app.js",
+    "public/js/filters.js",
+    "public/js/services.js",
+    "bower_components/angular-resource/angular-resource.min.js"
+  ];
+  var txt = "";
+  for (var i = 0; i < files.length; i++) {
+    var f = files[i];
+    txt += fs.readFileSync(f);
+  }
+  res.set("Content-Type", "application/javascript");
+  res.send(txt);
+});
+app.use(express.static(path.join(__dirname, '../public'), {
+  maxage: "7 days"
+}));
+app.use("/bower_components", express.static(path.join(__dirname, '../bower_components'), {
+  maxage: "7 days"
+}));
 app.use(flash());
 var store = new SequelizeStore({
   db: sequelize
