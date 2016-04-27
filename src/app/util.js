@@ -36,17 +36,19 @@ var util = {
    */
   getRemainingCards: function (game, black) {
     if (!game) throw "No game";
-    return game.getPlayedCards()
-      .then(function (played) {
-        var nin = played.map(c => c.id);
-        var where = {isBlack: !!black};
-        if (nin.length > 0)
-          where.id = {$notIn: nin};
-        return models.Card.findAll({where: where})
-          .then(function (cards) {
-            return cards;
-          });
-      });
+    return game.reload().then(function(game) {
+      return game.getPlayedCards()
+        .then(function (played) {
+          var nin = played.map(c => c.id);
+          var where = {isBlack: !!black};
+          if (nin.length > 0)
+            where.id = {$notIn: nin};
+          return models.Card.findAll({where: where})
+            .then(function (cards) {
+              return cards;
+            });
+        });
+    });
   },
   /**
    * Draw a number of cards
@@ -57,13 +59,22 @@ var util = {
     return player.getGame({include: [{all: true}]}).then(function (game) {
       return util.getRemainingCards(game)
         .then(function (cards) {
+          if (cards.length < num) { //Reset deck
+            console.log("Not enough cards");
+            return game.setPlayedCards(cards.filter(c => !c.isBlack)).then(function () {
+              return util.drawCards(player, num);
+            });
+          }
           var drawn = [];
           for (var i = 0; i < num; i++) {
             var idx = Math.floor(Math.random() * cards.length);
             drawn.push(cards[idx]);
             cards.splice(idx, 1);
           }
-          return Promise.all([player.addHandCards(drawn), game.addPlayedCards(drawn)]).then(() => player.save()).then(() => game.save()).then(() => player.getHandCards());
+          console.log(player.id + " drawn " + drawn.map(c => c.id));
+          return Promise.all([player.addHandCards(drawn), game.addPlayedCards(drawn)]).then(() => player.save()).then(() => game.save()).then(() => {
+            return player.getHandCards();
+          });
         });
     });
   },

@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
       associate: function (models) {
         Game.belongsTo(models.User, {as: 'Host', constraints: false});
         Game.belongsTo(models.Card, {as: "BlackCard"});
-        Game.belongsToMany(models.Card, {through: "PlayedCards", as: "PlayedCards"});
+        Game.belongsToMany(models.Card, {through: "PlayedCards", as: "PlayedCards", constraints: false});
         Game.hasMany(models.Player);
       }
     }

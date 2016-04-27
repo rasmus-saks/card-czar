@@ -66,10 +66,11 @@ function Socket(options) {
         if (game.status !== 0) {
           throw "Game has already started";
         }
-        game.getPlayers({include: [{all: true}]}).then(function (players) {
+        return game.getPlayers({include: [{all: true}]}).then(function (players) {
           players[0].status = 1; //Card czar
           game.status = 1;
           return util.chooseBlackCard(game).then(function (game) {
+            game.status = 1;
             function drawCards(u) {
               return util.drawCards(u, 10).then(function (cards) {
                 io.to(u.User.socketId).emit('status', {
@@ -87,10 +88,11 @@ function Socket(options) {
                 players: players,
                 game: game
               });
-              proms = proms.then(drawCards(u));
+              proms = proms.then(function() { return drawCards(u)});
             }
             return proms;
           }).then(function () {
+            console.log("IT DID THE THING");
             players.map(u => u.save());
             game.save();
           });
