@@ -10,8 +10,16 @@ class UserBehavior(TaskSet):
     def index(self):
         self.client.get("/")
 
+    @task(1)
+    def auth(self):
+        self.client.get("/auth")
+
+    @task(1)
+    def deckbrowser(self):
+        self.client.get("/deckbrowser")
+
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
-    min_wait = 5000
-    max_wait = 9000
+    min_wait = 1000
+    max_wait = 1500
