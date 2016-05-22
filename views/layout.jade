@@ -1,6 +1,6 @@
 doctype html
 block vars
-html(manifest= req.path == "/" ? "cache-manifest" : undefined)
+html(manifest=(req.originalUrl === "/" ? "cache-manifest" : undefined))
   head
     meta(charset="utf-8")
     title Card Czar

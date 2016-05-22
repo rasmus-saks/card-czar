@@ -124,6 +124,7 @@ app.use(passport.session());
 require("./app/passport.js")(passport);
 
 app.use(function (req, res, next) {
+  console.log(req.originalUrl);
   res.locals.req = req;
   //Get language file
   if (req.query.lang) {
