@@ -5,3 +5,8 @@ js/landing.js
 js/services.js
 css/style.css
 image1.png
+bower_components/bootstrap/dist/css/bootstrap.min.css
+combined.js
+http://code.jquery.com/jquery-2.2.3.min.js
+favicon.ico
+https://use.typekit.net/whw4sfa.js
