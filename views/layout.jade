@@ -1,17 +1,18 @@
 doctype html
 block vars
-head
-  meta(charset="utf-8")
-  title Card Czar
-  meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
-  link(href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet")
-  link(href="/css/style.css" rel="stylesheet")
-  script(src="https://use.typekit.net/whw4sfa.js")
-  script.
-    try{Typekit.load({ async: false });}catch(e){}
-body(data-ng-app="CardCzar" data-ng-controller="CCMain as main")
-  block body
-    
-  block scripts
-    script(src="//code.jquery.com/jquery-2.2.3.min.js")
-    script(src="/js/combined.js")
+html(manifest="cache-manifest")
+  head
+    meta(charset="utf-8")
+    title Card Czar
+    meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
+    link(href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet")
+    link(href="/css/style.css" rel="stylesheet")
+    script(src="https://use.typekit.net/whw4sfa.js")
+    script.
+      try{Typekit.load({ async: false });}catch(e){}
+  body(data-ng-app="CardCzar" data-ng-controller="CCMain as main")
+    block body
+      
+    block scripts
+      script(src="//code.jquery.com/jquery-2.2.3.min.js")
+      script(src="/js/combined.js")
